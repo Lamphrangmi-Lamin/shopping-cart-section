@@ -1,46 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-  <!-- [Delete this comment] This file is the main file for the challenge. For the most part, you should be editing this file. -->
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Hero Section | GreatFrontEnd Projects</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="css/style.css" />
+<!-- [Delete this comment] This file is the main file for the challenge. For the most part, you should be editing this file. -->
 
-    <!-- Tailwind CDN allows you to use Tailwind classes immediately in your HTML without any installation steps. 
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shopping Cart Section</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Tailwind CDN allows you to use Tailwind classes immediately in your HTML without any installation steps. 
       If you're not using Tailwind, you may delete the <script> -->
-    <!-- Get started on Tailwind: https://tailwindcss.com/docs/installation/play-cdn -->
-    <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Get started on Tailwind: https://tailwindcss.com/docs/installation/play-cdn -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
 
-    <link rel="icon" href="img/favicon.ico" sizes="any" />
-    <style>
-      /* You may write styles inside this <style> tag or within `css/style.css`. */
-    </style>
-  </head>
-  <body>
-    <!-- Add your site or application content here -->
-    <h1 class="text-5xl text-center font-semibold pt-20">
-      Hello world! Write your content here.
-    </h1>
+  <link rel="icon" href="img/favicon.ico" sizes="any" />
+  <style>
+    /* You may write styles inside this <style> tag or within `css/style.css`. */
+  </style>
+</head>
 
-    <!-- Attribute this challenge to yourself! -->
-    <div class="credits">
-      A challenge by
-      <a
-        href="https://www.greatfrontend.com/projects?ref=challenges"
-        target="_blank"
-        >GreatFrontEnd Projects</a
-      >. Built by
-      <a href="https://www.greatfrontend.com/u/your_username" target="_blank"
-        >Your Name</a
-      >.
+<body class="">
+  <div class="grid-container grid grid-cols-4 gap-x-4">
+    <!-- Heading text -->
+  <h1 class="col-span-4">Shopping Cart</h1>
+
+  <!-- Left section -->
+  <div class="left-section col-span-4">
+    <!-- Products -->
+    <div class="product-card">
+      <figure>
+        <img src="https://vaqybtnqyonvlwtskzmv.supabase.co/storage/v1/object/public/e-commerce-track-images/stepsoft-socks/stepsoft-socks-1.jpg" alt="">
+      </figure>
+      <!-- Product name -->
+      <h2>StepSoft Socks</h2>
+      <!-- Product specs -->
+       <p>Orange • Extra Small</p>
+       <!-- Product description -->
+        <p>Step into luxury with our StepSoft Socks, designed to pamper your feet with every step. Their cloud-like cushioning is like a spa for your soles.</p>
+
+        <!-- Controls -->
+         <div class="">
+          <div class="">
+            <button><i class="ri-add-fill"></i></button>
+            <input type="number" value="1">
+            <button><i class="ri-subtract-fill"></i></button>
+          </div>
+
+          <button>Remove</button>
+
+          <p><span>$22.50</span> <span>$25</span></p>
+         </div>
     </div>
-    <script src="js/index.js"></script>
-  </body>
+
+    <!-- Separator -->
+     <hr>
+  </div>
+
+  <!-- Right section -->
+   <div class="right-section col-span-4">
+    <h2>Order Summary</h2>
+    <!-- subtotal & shipping -->
+     <div class="">
+       <div class="subtotal">
+        <p>Subtotal</p>
+        <p>$162.50</p>
+       </div>
+       <div class="shipping">
+        <p>Shipping</p>
+        <p>FREE</p>
+       </div>
+       <div class="coupon">
+        <p><i class="ri-coupon-line"></i> Add coupon code</p>
+       </div>
+     </div>
+     <hr>
+     <div class="total">
+      <p>Total</p>
+      <p>$162.50</p>
+     </div>
+     <div class="checkout-button">
+      <button>Checkout</button>
+     </div>
+   </div>
+  </div>
+
+  <!-- Attribute this challenge to yourself! -->
+  <div class="credits">
+    A challenge by
+    <a href="https://www.greatfrontend.com/projects?ref=challenges" target="_blank">GreatFrontEnd Projects</a>. Built by
+    <a href="https://www.greatfrontend.com/u/your_username" target="_blank">Lamphrangmi Lamin</a>.
+  </div>
+  <script src="js/index.js"></script>
+</body>
+
 </html>
