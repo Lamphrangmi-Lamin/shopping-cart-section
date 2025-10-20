@@ -24,24 +24,24 @@
   </style>
 </head>
 
-<body class="">
-  <div class="grid-container grid grid-cols-4 gap-x-4">
+<body class="bg-gradient-to-r from-[#F9FAFB] to-[#D2D6DB]">
+  <div class="grid-container bg-white absolute inset-4 px-4 py-12 shadow-sm rounded-md grid grid-cols-4 gap-x-4">
     <!-- Heading text -->
-  <h1 class="col-span-4">Shopping Cart</h1>
+  <h1 class="col-span-4 text-3xl font-semibold text-neutral-900 mb-16">Shopping Cart</h1>
 
   <!-- Left section -->
   <div class="left-section col-span-4">
     <!-- Products -->
     <div class="product-card">
-      <figure>
-        <img src="https://vaqybtnqyonvlwtskzmv.supabase.co/storage/v1/object/public/e-commerce-track-images/stepsoft-socks/stepsoft-socks-1.jpg" alt="">
+      <figure class="h-[200px]">
+        <img class="w-[319px] h-[200px] object-cover rounded-lg" src="https://vaqybtnqyonvlwtskzmv.supabase.co/storage/v1/object/public/e-commerce-track-images/stepsoft-socks/stepsoft-socks-1.jpg" alt="product image">
       </figure>
-      <!-- Product name -->
-      <h2>StepSoft Socks</h2>
+      <!-- Card title -->
+      <h2 class="text-2xl font-medium text-neutral-900">StepSoft Socks</h2>
       <!-- Product specs -->
-       <p>Orange • Extra Small</p>
+       <p class="font-medium text-neutral-600">Orange • Extra Small</p>
        <!-- Product description -->
-        <p>Step into luxury with our StepSoft Socks, designed to pamper your feet with every step. Their cloud-like cushioning is like a spa for your soles.</p>
+        <p class="text-sm text-neutral-600">Step into luxury with our StepSoft Socks, designed to pamper your feet with every step. Their cloud-like cushioning is like a spa for your soles.</p>
 
         <!-- Controls -->
          <div class="">
@@ -51,9 +51,9 @@
             <button><i class="ri-subtract-fill"></i></button>
           </div>
 
-          <button>Remove</button>
+          <button class="text-sm text-neutral-600 font-medium">Remove</button>
 
-          <p><span>$22.50</span> <span>$25</span></p>
+          <p><span class="text-lg text-neutral-900 font-medium">$22.50</span> <span class="text-neutral-600 text-[12px] line-through">$25</span></p>
          </div>
     </div>
 
@@ -90,11 +90,11 @@
   </div>
 
   <!-- Attribute this challenge to yourself! -->
-  <div class="credits">
+  <!-- <div class="credits">
     A challenge by
     <a href="https://www.greatfrontend.com/projects?ref=challenges" target="_blank">GreatFrontEnd Projects</a>. Built by
     <a href="https://www.greatfrontend.com/u/your_username" target="_blank">Lamphrangmi Lamin</a>.
-  </div>
+  </div> -->
   <script src="js/index.js"></script>
 </body>
 
