@@ -32,7 +32,7 @@
   <!-- Left section -->
   <div class="left-section col-span-4">
     <!-- Products -->
-    <div class="product-card">
+    <div class="product-card flex gap-y-4 flex-col">
       <figure class="h-[200px]">
         <img class="w-[319px] h-[200px] object-cover rounded-lg" src="https://vaqybtnqyonvlwtskzmv.supabase.co/storage/v1/object/public/e-commerce-track-images/stepsoft-socks/stepsoft-socks-1.jpg" alt="product image">
       </figure>
@@ -44,11 +44,11 @@
         <p class="text-sm text-neutral-600">Step into luxury with our StepSoft Socks, designed to pamper your feet with every step. Their cloud-like cushioning is like a spa for your soles.</p>
 
         <!-- Controls -->
-         <div class="">
-          <div class="">
-            <button><i class="ri-add-fill"></i></button>
-            <input type="number" value="1">
-            <button><i class="ri-subtract-fill"></i></button>
+         <div class="flex justify-between items-center">
+          <div class="bg-neutral-50 rounded-md max-w-[125px] px-1.5 py-2 flex justify-center">
+            <button><i class="ri-subtract-fill text-[20px] text-neutral-400"></i></button>
+            <input class="w-12 text-sm mx-3 bg-neutral-50 [appearance:textfield] text-center" type="number" value="1">
+            <button><i class="ri-add-fill text-[20px] text-neutral-600"></i></button>
           </div>
 
           <button class="text-sm text-neutral-600 font-medium">Remove</button>
@@ -58,7 +58,7 @@
     </div>
 
     <!-- Separator -->
-     <hr>
+     <hr class="my-8">
   </div>
 
   <!-- Right section -->
