@@ -25,14 +25,15 @@
 </head>
 
 <body class="bg-gradient-to-r from-[#F9FAFB] to-[#D2D6DB] min-h-screen p-4">
-  <div class="grid-container bg-white relative w-full h-full px-4 py-12 shadow-sm rounded-md grid grid-cols-4 gap-x-4">
+  <div class="grid-container bg-white relative w-full px-4 py-12 shadow-sm rounded-md grid grid-cols-4 gap-x-4">
     <!-- Heading text -->
   <h1 class="col-span-4 text-3xl font-semibold text-neutral-900 mb-16">Shopping Cart</h1>
 
   <!-- Left section -->
   <div class="left-section col-span-4">
-    <!-- Products -->
-    <div class="product-card flex gap-y-4 flex-col">
+    <!-- Products Cards -->
+    <div class="product-card flex gap-y-4 flex-col
+    border-b-2 border-dotted border-neutral-200 pb-8 mb-8 last:border-b-0">
       <figure class="h-[200px]">
         <img class="w-[319px] h-[200px] object-cover rounded-lg" src="https://vaqybtnqyonvlwtskzmv.supabase.co/storage/v1/object/public/e-commerce-track-images/stepsoft-socks/stepsoft-socks-1.jpg" alt="product image">
       </figure>
@@ -57,8 +58,84 @@
          </div>
     </div>
 
-    <!-- Separator -->
-     <hr class="my-8">
+    <div class="product-card flex gap-y-4 flex-col
+    border-b-2 border-dotted border-neutral-200 pb-8 mb-8 last:border-b-0">
+      <figure class="h-[200px]">
+        <img class="w-[319px] h-[200px] object-cover rounded-lg" src="https://vaqybtnqyonvlwtskzmv.supabase.co/storage/v1/object/public/e-commerce-track-images/elemental-sneakers/elemental-sneakers-1.jpg" alt="product image">
+      </figure>
+      <!-- Card title -->
+      <h2 id="product-name" class="text-2xl font-medium text-neutral-900">Elemental Sneakers</h2>
+      <!-- Product specs -->
+       <p class="font-medium text-neutral-600"><span id="color">Beige</span> • <span id="size">6</span></p>
+       <!-- Product description -->
+        <p class="text-sm text-neutral-600">Ground your steps in style with our Elemental Sneakers. Designed with the elements in mind, they bring a natural balance to your stride and your ensemble.</p>
+
+        <!-- Controls -->
+         <div class="flex justify-between items-center">
+          <div class="bg-neutral-50 rounded-md max-w-[125px] px-1.5 py-2 flex justify-center">
+            <button><i class="ri-subtract-fill text-[20px] text-neutral-400"></i></button>
+            <input class="w-12 text-sm mx-3 bg-neutral-50 [appearance:textfield] text-center" type="number" value="1">
+            <button><i class="ri-add-fill text-[20px] text-neutral-600"></i></button>
+          </div>
+
+          <button class="text-sm text-neutral-600 font-medium">Remove</button>
+
+          <p><span class="text-lg text-neutral-900 font-medium">$80</span> <span class="text-neutral-600 text-[12px] line-through">$100</span></p>
+         </div>
+    </div>
+
+    <div class="product-card flex gap-y-4 flex-col
+    border-b-2 border-dotted border-neutral-200 pb-8 mb-8 last:border-b-0">
+      <figure class="h-[200px]">
+        <img class="w-[319px] h-[200px] object-cover rounded-lg" src="https://vaqybtnqyonvlwtskzmv.supabase.co/storage/v1/object/public/e-commerce-track-images/azure-attitude-shades/azure-attitude-shades-1.jpg" alt="product image">
+      </figure>
+      <!-- Card title -->
+      <h2 id="product-name" class="text-2xl font-medium text-neutral-900">Azure Attitude Shades</h2>
+      <!-- Product specs -->
+       <p class="font-medium text-neutral-600"><span id="color">Blue</span> <span id="size"></span></p>
+       <!-- Product description -->
+        <p class="text-sm text-neutral-600">Step out in style with our Azure Attitude Shades, featuring a bold blue tint and modern design. These sunglasses are not just an accessory but a statement of confidence.</p>
+
+        <!-- Controls -->
+         <div class="flex justify-between items-center">
+          <div class="bg-neutral-50 rounded-md max-w-[125px] px-1.5 py-2 flex justify-center">
+            <button><i class="ri-subtract-fill text-[20px] text-neutral-400"></i></button>
+            <input class="w-12 text-sm mx-3 bg-neutral-50 [appearance:textfield] text-center" type="number" value="1">
+            <button><i class="ri-add-fill text-[20px] text-neutral-600"></i></button>
+          </div>
+
+          <button class="text-sm text-neutral-600 font-medium">Remove</button>
+
+          <p><span class="text-lg text-neutral-900 font-medium">$45</span> <span class="text-neutral-600 text-[12px] line-through"></span></p>
+         </div>
+    </div>
+
+    <div class="product-card flex gap-y-4 flex-col
+    border-b-2 border-dotted border-neutral-200 pb-8 mb-8 last:border-b-0">
+      <figure class="h-[200px]">
+        <img class="w-[319px] h-[200px] object-cover rounded-lg" src="https://vaqybtnqyonvlwtskzmv.supabase.co/storage/v1/object/public/e-commerce-track-images/urban-drift-bucket-hat/urban-drift-bucket-hat-5.jpg" alt="product image">
+      </figure>
+      <!-- Card title -->
+      <h2 id="product-name" class="text-2xl font-medium text-neutral-900">Urban Drift Bucket Hat</h2>
+      <!-- Product specs -->
+       <p class="font-medium text-neutral-600"><span id="color">White</span> <span id="size"></span></p>
+       <!-- Product description -->
+        <p class="text-sm text-neutral-600">Navigate the urban jungle with our Urban Drift Bucket Hat. It's not only trendy but also practical, offering shade from the hustle and bustle.</p>
+
+        <!-- Controls -->
+         <div class="flex justify-between items-center">
+          <div class="bg-neutral-50 rounded-md max-w-[125px] px-1.5 py-2 flex justify-center">
+            <button><i class="ri-subtract-fill text-[20px] text-neutral-400"></i></button>
+            <input class="w-12 text-sm mx-3 bg-neutral-50 [appearance:textfield] text-center" type="number" value="1">
+            <button><i class="ri-add-fill text-[20px] text-neutral-600"></i></button>
+          </div>
+
+          <button class="text-sm text-neutral-600 font-medium">Remove</button>
+
+          <p><span class="text-lg text-neutral-900 font-medium">$15</span> <span class="text-neutral-600 text-[12px] line-through"></span></p>
+         </div>
+    </div>
+
   </div>
 
   <!-- Right section -->
@@ -75,12 +152,14 @@
         <p class="text-neutral-600">Shipping</p>
         <p class="text-lg font-semibold">FREE</p>
        </div>
+
        <div class="coupon text-indigo-700 font-medium
        flex justify-end">
-        <p><i class="ri-coupon-line"></i> Add coupon code</p>
-       </div>
+       <p><i class="ri-coupon-line"></i> Add coupon code</p>
+      </div>
+
+      <hr class="border-dotted border-t-2 my-8">
      </div>
-     <hr class="border-dotted border-t-2">
      <div class="total flex justify-between">
       <p class="text-2xl font-medium">Total</p>
       <p class="text-4xl font-semibold">$162.50</p>
