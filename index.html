@@ -24,8 +24,8 @@
   </style>
 </head>
 
-<body class="bg-gradient-to-r from-[#F9FAFB] to-[#D2D6DB]">
-  <div class="grid-container bg-white absolute inset-4 px-4 py-12 shadow-sm rounded-md grid grid-cols-4 gap-x-4">
+<body class="bg-gradient-to-r from-[#F9FAFB] to-[#D2D6DB] min-h-screen p-4">
+  <div class="grid-container bg-white relative w-full h-full px-4 py-12 shadow-sm rounded-md grid grid-cols-4 gap-x-4">
     <!-- Heading text -->
   <h1 class="col-span-4 text-3xl font-semibold text-neutral-900 mb-16">Shopping Cart</h1>
 
@@ -62,29 +62,32 @@
   </div>
 
   <!-- Right section -->
-   <div class="right-section col-span-4">
-    <h2>Order Summary</h2>
+   <div class="right-section col-span-4 border border-neutral-200 rounded-lg p-4
+   flex flex-col gap-y-8">
+    <h2 class="text-2xl font-semibold text-neutral-900">Order Summary</h2>
     <!-- subtotal & shipping -->
      <div class="">
-       <div class="subtotal">
-        <p>Subtotal</p>
-        <p>$162.50</p>
+       <div class="subtotal flex justify-between mb-4">
+        <p class="text-neutral-600">Subtotal</p>
+        <p class="text-lg font-semibold text-neutral-900">$162.50</p>
        </div>
-       <div class="shipping">
-        <p>Shipping</p>
-        <p>FREE</p>
+       <div class="shipping flex justify-between mb-4">
+        <p class="text-neutral-600">Shipping</p>
+        <p class="text-lg font-semibold">FREE</p>
        </div>
-       <div class="coupon">
+       <div class="coupon text-indigo-700 font-medium
+       flex justify-end">
         <p><i class="ri-coupon-line"></i> Add coupon code</p>
        </div>
      </div>
-     <hr>
-     <div class="total">
-      <p>Total</p>
-      <p>$162.50</p>
+     <hr class="border-dotted border-t-2">
+     <div class="total flex justify-between">
+      <p class="text-2xl font-medium">Total</p>
+      <p class="text-4xl font-semibold">$162.50</p>
      </div>
      <div class="checkout-button">
-      <button>Checkout</button>
+      <button class="font-medium w-full bg-indigo-700 text-white
+      py-3 rounded">Checkout</button>
      </div>
    </div>
   </div>
