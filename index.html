@@ -25,13 +25,17 @@
 </head>
 
 <body class="bg-gradient-to-r from-[#F9FAFB] to-[#D2D6DB] min-h-screen p-4">
-  <div class="grid-container bg-white relative w-full px-4 py-12 shadow-sm rounded-md grid grid-cols-4 gap-x-4
-  md:py-16 md:gap-x-8">
+  <div class="grid-container mx-auto items-start bg-white relative w-full px-4 py-12 shadow-sm rounded-md grid grid-cols-4 gap-x-4
+  md:grid-cols-6 md:py-16 md:gap-x-8
+  xl:grid-cols-12
+  max-w-screen-xl">
     <!-- Heading text -->
-  <h1 class="col-span-4 text-3xl font-semibold text-neutral-900 mb-16">Shopping Cart</h1>
+  <h1 class="col-span-4 text-3xl font-semibold text-neutral-900 mb-16
+  md:col-span-6
+  xl:col-span-12 xl:text-5xl">Shopping Cart</h1>
 
   <!-- Left section -->
-  <div class="left-section col-span-4">
+  <div class="left-section col-span-4 md:col-span-6 xl:col-span-8">
     <!-- Products Cards -->
     <div class="product-card flex gap-y-4 flex-col
     border-b-2 border-dotted border-neutral-200 pb-8 mb-8 last:border-b-0
@@ -118,7 +122,7 @@
     border-b-2 border-dotted border-neutral-200 pb-8 mb-8 last:border-b-0
     md:flex-row md:gap-x-8">
       <figure class="min-w-[280px] h-[200px]">
-        <img class="w-full h-full] object-cover rounded-lg
+        <img class="w-full h-full object-cover rounded-lg
         md:w-[280px]" src="https://vaqybtnqyonvlwtskzmv.supabase.co/storage/v1/object/public/e-commerce-track-images/urban-drift-bucket-hat/urban-drift-bucket-hat-5.jpg" alt="product image">
       </figure>
       <!-- Card title -->
@@ -144,7 +148,7 @@
   </div>
 
   <!-- Right section -->
-   <div class="right-section col-span-4 border border-neutral-200 rounded-lg p-4
+   <div class="right-section col-span-4 md:col-span-6 xl:col-span-4 border border-neutral-200 rounded-lg p-4
    flex flex-col gap-y-8">
     <h2 class="text-2xl font-semibold text-neutral-900">Order Summary</h2>
     <!-- subtotal & shipping -->
