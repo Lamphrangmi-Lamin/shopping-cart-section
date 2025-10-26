@@ -1,192 +1,322 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- [Delete this comment] This file is the main file for the challenge. For the most part, you should be editing this file. -->
+  <!-- [Delete this comment] This file is the main file for the challenge. For the most part, you should be editing this file. -->
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Shopping Cart Section</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Shopping Cart Section</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
 
-  <!-- Tailwind CDN allows you to use Tailwind classes immediately in your HTML without any installation steps. 
+    <!-- Tailwind CDN allows you to use Tailwind classes immediately in your HTML without any installation steps. 
       If you're not using Tailwind, you may delete the <script> -->
-  <!-- Get started on Tailwind: https://tailwindcss.com/docs/installation/play-cdn -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
+    <!-- Get started on Tailwind: https://tailwindcss.com/docs/installation/play-cdn -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
 
-  <link rel="icon" href="img/favicon.ico" sizes="any" />
-  <style>
-    /* You may write styles inside this <style> tag or within `css/style.css`. */
-  </style>
-</head>
+    <link rel="icon" href="img/favicon.ico" sizes="any" />
+    <style>
+      /* You may write styles inside this <style> tag or within `css/style.css`. */
+    </style>
+  </head>
 
-<body class="bg-gradient-to-r from-[#F9FAFB] to-[#D2D6DB] min-h-screen p-4">
-  <div class="grid-container mx-auto items-start bg-white relative w-full px-4 py-12 shadow-sm rounded-md grid grid-cols-4 gap-x-4
-  md:grid-cols-6 md:py-16 md:gap-x-8
-  xl:grid-cols-12
-  max-w-screen-xl">
-    <!-- Heading text -->
-  <h1 class="col-span-4 text-3xl font-semibold text-neutral-900 mb-16
-  md:col-span-6
-  xl:col-span-12 xl:text-5xl">Shopping Cart</h1>
+  <body class="bg-gradient-to-r from-[#F9FAFB] to-[#D2D6DB] min-h-screen p-4">
+    <div
+      class="grid-container mx-auto items-start bg-white relative w-full px-4 py-12 shadow-sm rounded-md grid grid-cols-4 gap-x-4 md:grid-cols-6 md:py-16 md:gap-x-8 xl:grid-cols-12 max-w-screen-xl"
+    >
+      <!-- Heading text -->
+      <h1
+        class="col-span-4 text-3xl font-semibold text-neutral-900 mb-16 md:col-span-6 xl:col-span-12 xl:text-5xl"
+      >
+        Shopping Cart
+      </h1>
 
-  <!-- Left section -->
-  <div class="left-section col-span-4 md:col-span-6 xl:col-span-8">
-    <!-- Products Cards -->
-    <div class="product-card flex gap-y-4 flex-col
-    border-b-2 border-dotted border-neutral-200 pb-8 mb-8 last:border-b-0
-    md:flex-row md:gap-x-8">
-      <figure class="min-w-[280px] h-[200px]">
-        <img class="w-full h-full object-cover rounded-lg
-        md:w-[280px]" src="https://vaqybtnqyonvlwtskzmv.supabase.co/storage/v1/object/public/e-commerce-track-images/stepsoft-socks/stepsoft-socks-1.jpg" alt="product image">
-      </figure>
-      <!-- Card title -->
-      <div class=" flex flex-col gap-y-4">
-        <h2 class="text-2xl font-medium text-neutral-900">StepSoft Socks</h2>
-        <!-- Product specs -->
-         <p class="font-medium text-neutral-600">Orange • Extra Small</p>
-         <!-- Product description -->
-          <p class="text-sm text-neutral-600">Step into luxury with our StepSoft Socks, designed to pamper your feet with every step. Their cloud-like cushioning is like a spa for your soles.</p>
-          <!-- Controls -->
-           <div class="flex items-center">
-            <div class="bg-neutral-50 rounded-md max-w-[125px] px-1.5 py-2 flex justify-center">
-              <button><i class="ri-subtract-fill text-[20px] text-neutral-400"></i></button>
-              <input class="w-12 text-sm mx-3 bg-neutral-50 [appearance:textfield] text-center" type="number" value="1">
-              <button><i class="ri-add-fill text-[20px] text-neutral-600"></i></button>
+      <!-- Left section -->
+      <div class="left-section col-span-4 md:col-span-6 xl:col-span-8">
+        <!-- Products Cards -->
+        <div
+          class="product-card flex gap-y-4 flex-col border-b-2 border-dotted border-neutral-200 pb-8 mb-8 last:border-b-0 md:flex-row md:gap-x-8"
+        >
+          <figure class="min-w-[280px] h-[200px]">
+            <img
+              class="w-full h-full object-cover rounded-lg md:w-[280px]"
+              src="https://vaqybtnqyonvlwtskzmv.supabase.co/storage/v1/object/public/e-commerce-track-images/stepsoft-socks/stepsoft-socks-1.jpg"
+              alt="product image"
+            />
+          </figure>
+          <!-- Card title -->
+          <div class="flex flex-col gap-y-4">
+            <h2 class="text-2xl font-medium text-neutral-900">
+              StepSoft Socks
+            </h2>
+            <!-- Product specs -->
+            <p class="font-medium text-neutral-600">Orange • Extra Small</p>
+            <!-- Product description -->
+            <p class="text-sm text-neutral-600">
+              Step into luxury with our StepSoft Socks, designed to pamper your
+              feet with every step. Their cloud-like cushioning is like a spa
+              for your soles.
+            </p>
+            <!-- Cart Controls -->
+            <div class="flex items-center">
+              <div
+                class="bg-neutral-50 rounded-md max-w-[125px] px-1.5 py-2 flex justify-center"
+              >
+                <button class="text-neutral-600 disabled:text-neutral-400">
+                  <i class="ri-subtract-fill text-[20px]"></i>
+                </button>
+                <input
+                  class="w-12 text-sm mx-3 bg-neutral-50 [appearance:textfield] text-center"
+                  type="number"
+                  value="1"
+                />
+                <button disabled class="text-neutral-600 disabled:text-neutral-400">
+                  <i class="ri-add-fill text-[20px]"></i>
+                </button>
+              </div>
+              <a
+                aria-disabled="false"
+                href="#"
+                class="text-sm text-neutral-600 font-medium ml-4 hover:text-neutral-900 focus:ring-4 focus:ring-neutral-200 rounded px-1 aria-disabled:text-neutral-400"
+                >Remove</a
+              >
+              <p class="ml-auto">
+                <span class="text-lg text-neutral-900 font-medium">$22.50</span>
+                <span class="text-neutral-600 text-[12px] line-through"
+                  >$25</span
+                >
+              </p>
             </div>
-            <button class="text-sm text-neutral-600 font-medium  ml-4">Remove</button>
-            <p class="ml-auto"><span class="text-lg text-neutral-900 font-medium">$22.50</span> <span class="text-neutral-600 text-[12px] line-through">$25</span></p>
-           </div>
+          </div>
+        </div>
+
+        <div
+          class="product-card flex gap-y-4 flex-col border-b-2 border-dotted border-neutral-200 pb-8 mb-8 last:border-b-0 md:flex-row md:gap-x-8"
+        >
+          <figure class="min-w-[280px] h-[200px]">
+            <img
+              class="w-full h-full object-cover rounded-lg md:w-[280px]"
+              src="https://vaqybtnqyonvlwtskzmv.supabase.co/storage/v1/object/public/e-commerce-track-images/elemental-sneakers/elemental-sneakers-1.jpg"
+              alt="product image"
+            />
+          </figure>
+          <!-- Card title -->
+          <div class="flex flex-col gap-y-4">
+            <h2 id="product-name" class="text-2xl font-medium text-neutral-900">
+              Elemental Sneakers
+            </h2>
+            <!-- Product specs -->
+            <p class="font-medium text-neutral-600">
+              <span id="color">Beige</span> • <span id="size">6</span>
+            </p>
+            <!-- Product description -->
+            <p class="text-sm text-neutral-600">
+              Ground your steps in style with our Elemental Sneakers. Designed
+              with the elements in mind, they bring a natural balance to your
+              stride and your ensemble.
+            </p>
+            <!-- Cart Controls -->
+            <div class="flex items-center">
+              <div
+                class="bg-neutral-50 rounded-md max-w-[125px] px-1.5 py-2 flex justify-center"
+              >
+                <button class="text-neutral-600 disabled:text-neutral-400">
+                  <i class="ri-subtract-fill text-[20px]"></i>
+                </button>
+                <input
+                  class="w-12 text-sm mx-3 bg-neutral-50 [appearance:textfield] text-center"
+                  type="number"
+                  value="1"
+                />
+                <button disabled class="text-neutral-600 disabled:text-neutral-400">
+                  <i class="ri-add-fill text-[20px]"></i>
+                </button>
+              </div>
+              <a
+                aria-disabled="false"
+                href="#"
+                class="text-sm text-neutral-600 font-medium ml-4 hover:text-neutral-900 focus:ring-4 focus:ring-neutral-200 rounded px-1 aria-disabled:text-neutral-400"
+                >Remove</a
+              >
+              <p class="ml-auto">
+                <span class="text-lg text-neutral-900 font-medium">$80</span>
+                <span class="text-neutral-600 text-[12px] line-through"
+                  >$100</span
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="product-card flex gap-y-4 flex-col border-b-2 border-dotted border-neutral-200 pb-8 mb-8 last:border-b-0 md:flex-row md:gap-x-8"
+        >
+          <figure class="min-w-[280px] h-[200px]">
+            <img
+              class="w-full h-full object-cover rounded-lg md:w-[280px]"
+              src="https://vaqybtnqyonvlwtskzmv.supabase.co/storage/v1/object/public/e-commerce-track-images/azure-attitude-shades/azure-attitude-shades-1.jpg"
+              alt="product image"
+            />
+          </figure>
+          <!-- Card title -->
+          <div class="flex flex-col gap-y-4">
+            <h2 id="product-name" class="text-2xl font-medium text-neutral-900">
+              Azure Attitude Shades
+            </h2>
+            <!-- Product specs -->
+            <p class="font-medium text-neutral-600">
+              <span id="color">Blue</span> <span id="size"></span>
+            </p>
+            <!-- Product description -->
+            <p class="text-sm text-neutral-600">
+              Step out in style with our Azure Attitude Shades, featuring a bold
+              blue tint and modern design. These sunglasses are not just an
+              accessory but a statement of confidence.
+            </p>
+            <!-- Cart Controls -->
+            <div class="flex items-center">
+              <div
+                class="bg-neutral-50 rounded-md max-w-[125px] px-1.5 py-2 flex justify-center"
+              >
+                <button class="text-neutral-600 disabled:text-neutral-400">
+                  <i class="ri-subtract-fill text-[20px]"></i>
+                </button>
+                <input
+                  class="w-12 text-sm mx-3 bg-neutral-50 [appearance:textfield] text-center"
+                  type="number"
+                  value="1"
+                />
+                <button disabled class="text-neutral-600 disabled:text-neutral-400">
+                  <i class="ri-add-fill text-[20px]"></i>
+                </button>
+              </div>
+              <a
+                aria-disabled="false"
+                href="#"
+                class="text-sm text-neutral-600 font-medium ml-4 hover:text-neutral-900 focus:ring-4 focus:ring-neutral-200 rounded px-1 aria-disabled:text-neutral-400"
+                >Remove</a
+              >
+              <p class="ml-auto">
+                <span class="text-lg text-neutral-900 font-medium">$45</span>
+                <span class="text-neutral-600 text-[12px] line-through"></span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="product-card flex gap-y-4 flex-col border-b-2 border-dotted border-neutral-200 pb-8 mb-8 last:border-b-0 md:flex-row md:gap-x-8"
+        >
+          <figure class="min-w-[280px] h-[200px]">
+            <img
+              class="w-full h-full object-cover rounded-lg md:w-[280px]"
+              src="https://vaqybtnqyonvlwtskzmv.supabase.co/storage/v1/object/public/e-commerce-track-images/urban-drift-bucket-hat/urban-drift-bucket-hat-5.jpg"
+              alt="product image"
+            />
+          </figure>
+          <!-- Card title -->
+          <div class="flex flex-col gap-y-4">
+            <h2 id="product-name" class="text-2xl font-medium text-neutral-900">
+              Urban Drift Bucket Hat
+            </h2>
+            <!-- Product specs -->
+            <p class="font-medium text-neutral-600">
+              <span id="color">White</span> <span id="size"></span>
+            </p>
+            <!-- Product description -->
+            <p class="text-sm text-neutral-600">
+              Navigate the urban jungle with our Urban Drift Bucket Hat. It's
+              not only trendy but also practical, offering shade from the hustle
+              and bustle.
+            </p>
+            <!--Cart Controls -->
+            <div class="flex items-center">
+              <div
+                class="bg-neutral-50 rounded-md max-w-[125px] px-1.5 py-2 flex justify-center"
+              >
+                <button class="text-neutral-600 disabled:text-neutral-400">
+                  <i class="ri-subtract-fill text-[20px]"></i>
+                </button>
+                <input
+                  class="w-12 text-sm mx-3 bg-neutral-50 [appearance:textfield] text-center"
+                  type="number"
+                  value="1"
+                />
+                <button disabled class="text-neutral-600 disabled:text-neutral-400">
+                  <i class="ri-add-fill text-[20px]"></i>
+                </button>
+              </div>
+              <a
+                aria-disabled="false"
+                href="#"
+                class="text-sm text-neutral-600 font-medium ml-4 hover:text-neutral-900 focus:ring-4 focus:ring-neutral-200 rounded px-1 aria-disabled:text-neutral-400"
+                >Remove</a
+              >
+              <p class="ml-auto">
+                <span class="text-lg text-neutral-900 font-medium">$15</span>
+                <span class="text-neutral-600 text-[12px] line-through"></span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right section -->
+      <div
+        class="right-section col-span-4 md:col-span-6 xl:col-span-4 border border-neutral-200 rounded-lg p-4 flex flex-col gap-y-8"
+      >
+        <h2 class="text-2xl font-semibold text-neutral-900">Order Summary</h2>
+        <!-- subtotal & shipping -->
+        <div class="">
+          <div class="subtotal flex justify-between mb-4">
+            <p class="text-neutral-600">Subtotal</p>
+            <p class="text-lg font-semibold text-neutral-900">$162.50</p>
+          </div>
+          <div class="shipping flex justify-between mb-4">
+            <p class="text-neutral-600">Shipping</p>
+            <p class="text-lg font-semibold">FREE</p>
+          </div>
+
+          <div class="coupon text-indigo-700 font-medium flex justify-end">
+            <a
+              aria-disabled="false"
+              href="#"
+              class="focus:ring-4 focus:ring-neutral-200 rounded px-1 aria-disabled:text-neutral-400"
+              ><i class="ri-coupon-line"></i> Add coupon code</a
+            >
+          </div>
+
+          <hr class="border-dotted border-t-2 my-8" />
+        </div>
+        <div class="total flex justify-between">
+          <p class="text-2xl font-medium">Total</p>
+          <p class="text-4xl font-semibold">$162.50</p>
+        </div>
+        <div class="checkout-button">
+          <button
+            class="font-medium w-full bg-indigo-700 text-white hover:bg-indigo-800 shadow-md focus:ring-4 focus:bg-indigo-800 focus:ring-neutral-200 disabled:bg-neutral-100 disabled:text-neutral-400 disabled:shadow-none py-3 rounded"
+          >
+            Checkout
+          </button>
+        </div>
       </div>
     </div>
 
-    <div class="product-card flex gap-y-4 flex-col
-    border-b-2 border-dotted border-neutral-200 pb-8 mb-8 last:border-b-0
-    md:flex-row md:gap-x-8">
-      <figure class="min-w-[280px] h-[200px]">
-        <img class="w-full h-full object-cover rounded-lg
-        md:w-[280px]" src="https://vaqybtnqyonvlwtskzmv.supabase.co/storage/v1/object/public/e-commerce-track-images/elemental-sneakers/elemental-sneakers-1.jpg" alt="product image">
-      </figure>
-      <!-- Card title -->
-      <div class="flex flex-col gap-y-4">
-        <h2 id="product-name" class="text-2xl font-medium text-neutral-900">Elemental Sneakers</h2>
-        <!-- Product specs -->
-         <p class="font-medium text-neutral-600"><span id="color">Beige</span> • <span id="size">6</span></p>
-         <!-- Product description -->
-          <p class="text-sm text-neutral-600">Ground your steps in style with our Elemental Sneakers. Designed with the elements in mind, they bring a natural balance to your stride and your ensemble.</p>
-          <!-- Controls -->
-           <div class="flex items-center">
-            <div class="bg-neutral-50 rounded-md max-w-[125px] px-1.5 py-2 flex justify-center">
-              <button><i class="ri-subtract-fill text-[20px] text-neutral-400"></i></button>
-              <input class="w-12 text-sm mx-3 bg-neutral-50 [appearance:textfield] text-center" type="number" value="1">
-              <button><i class="ri-add-fill text-[20px] text-neutral-600"></i></button>
-            </div>
-            <button class="text-sm text-neutral-600 font-medium ml-4">Remove</button>
-            <p class="ml-auto"><span class="text-lg text-neutral-900 font-medium">$80</span> <span class="text-neutral-600 text-[12px] line-through">$100</span></p>
-           </div>
-      </div>
-    </div>
-
-    <div class="product-card flex gap-y-4 flex-col
-    border-b-2 border-dotted border-neutral-200 pb-8 mb-8 last:border-b-0
-    md:flex-row md:gap-x-8">
-      <figure class="min-w-[280px] h-[200px]">
-        <img class="w-full h-full object-cover rounded-lg
-        md:w-[280px]" src="https://vaqybtnqyonvlwtskzmv.supabase.co/storage/v1/object/public/e-commerce-track-images/azure-attitude-shades/azure-attitude-shades-1.jpg" alt="product image">
-      </figure>
-      <!-- Card title -->
-      <div class="flex flex-col gap-y-4">
-        <h2 id="product-name" class="text-2xl font-medium text-neutral-900">Azure Attitude Shades</h2>
-        <!-- Product specs -->
-         <p class="font-medium text-neutral-600"><span id="color">Blue</span> <span id="size"></span></p>
-         <!-- Product description -->
-          <p class="text-sm text-neutral-600">Step out in style with our Azure Attitude Shades, featuring a bold blue tint and modern design. These sunglasses are not just an accessory but a statement of confidence.</p>
-          <!-- Controls -->
-           <div class="flex items-center">
-            <div class="bg-neutral-50 rounded-md max-w-[125px] px-1.5 py-2 flex justify-center">
-              <button><i class="ri-subtract-fill text-[20px] text-neutral-400"></i></button>
-              <input class="w-12 text-sm mx-3 bg-neutral-50 [appearance:textfield] text-center" type="number" value="1">
-              <button><i class="ri-add-fill text-[20px] text-neutral-600"></i></button>
-            </div>
-            <button class="text-sm text-neutral-600 font-medium ml-4">Remove</button>
-            <p class="ml-auto"><span class="text-lg text-neutral-900 font-medium">$45</span> <span class="text-neutral-600 text-[12px] line-through"></span></p>
-           </div>
-      </div>
-    </div>
-
-    <div class="product-card flex gap-y-4 flex-col
-    border-b-2 border-dotted border-neutral-200 pb-8 mb-8 last:border-b-0
-    md:flex-row md:gap-x-8">
-      <figure class="min-w-[280px] h-[200px]">
-        <img class="w-full h-full object-cover rounded-lg
-        md:w-[280px]" src="https://vaqybtnqyonvlwtskzmv.supabase.co/storage/v1/object/public/e-commerce-track-images/urban-drift-bucket-hat/urban-drift-bucket-hat-5.jpg" alt="product image">
-      </figure>
-      <!-- Card title -->
-      <div class="flex flex-col gap-y-4">
-        <h2 id="product-name" class="text-2xl font-medium text-neutral-900">Urban Drift Bucket Hat</h2>
-        <!-- Product specs -->
-         <p class="font-medium text-neutral-600"><span id="color">White</span> <span id="size"></span></p>
-         <!-- Product description -->
-          <p class="text-sm text-neutral-600">Navigate the urban jungle with our Urban Drift Bucket Hat. It's not only trendy but also practical, offering shade from the hustle and bustle.</p>
-          <!-- Controls -->
-           <div class="flex items-center">
-            <div class="bg-neutral-50 rounded-md max-w-[125px] px-1.5 py-2 flex justify-center">
-              <button><i class="ri-subtract-fill text-[20px] text-neutral-400"></i></button>
-              <input class="w-12 text-sm mx-3 bg-neutral-50 [appearance:textfield] text-center" type="number" value="1">
-              <button><i class="ri-add-fill text-[20px] text-neutral-600"></i></button>
-            </div>
-            <button class="text-sm text-neutral-600 font-medium ml-4">Remove</button>
-            <p class="ml-auto"><span class="text-lg text-neutral-900 font-medium">$15</span> <span class="text-neutral-600 text-[12px] line-through"></span></p>
-           </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Right section -->
-   <div class="right-section col-span-4 md:col-span-6 xl:col-span-4 border border-neutral-200 rounded-lg p-4
-   flex flex-col gap-y-8">
-    <h2 class="text-2xl font-semibold text-neutral-900">Order Summary</h2>
-    <!-- subtotal & shipping -->
-     <div class="">
-       <div class="subtotal flex justify-between mb-4">
-        <p class="text-neutral-600">Subtotal</p>
-        <p class="text-lg font-semibold text-neutral-900">$162.50</p>
-       </div>
-       <div class="shipping flex justify-between mb-4">
-        <p class="text-neutral-600">Shipping</p>
-        <p class="text-lg font-semibold">FREE</p>
-       </div>
-
-       <div class="coupon text-indigo-700 font-medium
-       flex justify-end">
-       <p><i class="ri-coupon-line"></i> Add coupon code</p>
-      </div>
-
-      <hr class="border-dotted border-t-2 my-8">
-     </div>
-     <div class="total flex justify-between">
-      <p class="text-2xl font-medium">Total</p>
-      <p class="text-4xl font-semibold">$162.50</p>
-     </div>
-     <div class="checkout-button">
-      <button class="font-medium w-full bg-indigo-700 text-white
-      py-3 rounded">Checkout</button>
-     </div>
-   </div>
-  </div>
-
-  <!-- Attribute this challenge to yourself! -->
-  <!-- <div class="credits">
+    <!-- Attribute this challenge to yourself! -->
+    <!-- <div class="credits">
     A challenge by
     <a href="https://www.greatfrontend.com/projects?ref=challenges" target="_blank">GreatFrontEnd Projects</a>. Built by
     <a href="https://www.greatfrontend.com/u/your_username" target="_blank">Lamphrangmi Lamin</a>.
   </div> -->
-  <script src="js/index.js"></script>
-</body>
-
+    <script src="js/index.js"></script>
+  </body>
 </html>
