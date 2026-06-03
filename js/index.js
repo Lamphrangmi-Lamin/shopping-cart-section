@@ -1,5 +1,5 @@
 //* State / source of truth
-const cartItems = [
+let cartItems = [
   {
     sku: "ss-orange-xs",
     product_id: "stepsoft-socks",
@@ -97,6 +97,8 @@ const cartItems = [
   },
 ];
 
+// cartItems = [];
+
 // * Global constants
 const cartItemsContainer = document.getElementById("cartItemsContainer");
 const subtotal = document.getElementById("subtotal");
@@ -108,6 +110,13 @@ renderSubtotal();
 
 // * Rendering functions
 function renderCartItems(cartItems) {
+//   // ! If cart is empty display empty cart
+//   if (!cartItems.length) console.log("Empty Cart! Nothing to render");
+
+//   if (!cartItems.length) {
+//     // 
+//   }
+
   return cartItems
     .map((item) => {
       const {
@@ -172,12 +181,14 @@ function renderCartItems(cartItems) {
                 </button>
               </div>
 
-              <a
+              <button
+                data-action="remove"
+                data-sku="${sku}"
                 aria-disabled="false"
-                href="#"
                 class="text-sm text-neutral-600 font-medium ml-4 hover:text-neutral-900 focus:ring-4 focus:ring-neutral-200 rounded px-1 aria-disabled:text-neutral-400"
-                >Remove</a
-              >
+                >
+                Remove
+                </button>
 
               <div class="ml-auto">
                 <span class="text-lg text-neutral-900 font-medium">$${formatPrice(sale_price * quantity)}</span>
@@ -211,10 +222,10 @@ cartItemsContainer.addEventListener("click", (e) => {
 
   const itemIndex = cartItems.findIndex((item) => item.sku === sku);
   const item = cartItems[itemIndex];
-
-  const { stock, quantity } = item;
-
+  
   if (!item) return;
+  
+  const { stock, quantity } = item;
 
   // * Increment
   if (action === "increment") {
@@ -238,6 +249,11 @@ cartItemsContainer.addEventListener("click", (e) => {
     };
   }
 
+  // * Remove
+  if (action === "remove") {
+    cartItems = cartItems.filter((item) => item.sku !== sku);
+  }
+
   console.log(cartItems[itemIndex]);
 
   // ? Re-render cart items
@@ -246,7 +262,7 @@ cartItemsContainer.addEventListener("click", (e) => {
   renderSubtotal();
 });
 
-// * Helper functions
+// * Helper utility functions
 function formatPrice(price) {
   if (Number.isInteger(price)) return price;
   else return price.toFixed(2);
