@@ -1,6 +1,3 @@
-const cartItemsContainer = document.getElementById("cartItemsContainer");
-// !! console.log(cartItemsContainer);
-
 //* State / source of truth
 const cartItems = [
   {
@@ -100,8 +97,13 @@ const cartItems = [
   },
 ];
 
-cartItemsContainer.innerHTML = renderCartItems(cartItems);
+// * Global constants
+const cartItemsContainer = document.getElementById("cartItemsContainer");
 
+// * Initial render
+render();
+
+// * Rendering functions
 function renderCartItems(cartItems) {
   return cartItems
     .map((item) => {
@@ -114,6 +116,8 @@ function renderCartItems(cartItems) {
         discount_percentage,
         size,
         color,
+        quantity,
+        stock,
       } = item;
 
       return `<div
@@ -147,24 +151,31 @@ function renderCartItems(cartItems) {
               <div
                 class="bg-neutral-50 rounded-md max-w-[125px] px-1.5 py-2 flex justify-center"
               >
-                <button class="text-neutral-600 disabled:text-neutral-400">
+                <button
+                 ${quantity <= 1 ? "disabled" : ""}
+                 data-action="decrement" data-sku="${sku}" class="text-neutral-600 disabled:text-neutral-400 disabled:cursor-not-allowed">
                   <i class="ri-subtract-fill text-[20px]"></i>
                 </button>
                 <input
-                  class="w-12 text-sm mx-3 bg-neutral-50 [appearance:textfield] text-center"
+                  class="w-12 text-sm mx-3 bg-neutral-50 [appearance:textfield] text-center outline-none"
                   type="number"
-                  value="1"
+                  value="${quantity}"
+                  readonly
                 />
-                <button disabled class="text-neutral-600 disabled:text-neutral-400">
+                <button
+                ${quantity >= stock ? "disabled" : ""}
+                data-action="increment" data-sku="${sku}" class="text-neutral-600 disabled:text-neutral-400 disabled:cursor-not-allowed">
                   <i class="ri-add-fill text-[20px]"></i>
                 </button>
               </div>
+
               <a
                 aria-disabled="false"
                 href="#"
                 class="text-sm text-neutral-600 font-medium ml-4 hover:text-neutral-900 focus:ring-4 focus:ring-neutral-200 rounded px-1 aria-disabled:text-neutral-400"
                 >Remove</a
               >
+
               <div class="ml-auto">
                 <span class="text-lg text-neutral-900 font-medium">$${formatPrice(sale_price)}</span>
                 <span class="text-neutral-600 text-[12px] line-through"
@@ -178,40 +189,80 @@ function renderCartItems(cartItems) {
     .join("");
 }
 
+function render() {
+  cartItemsContainer.innerHTML = renderCartItems(cartItems);
+}
+
+// * Event listeners
+cartItemsContainer.addEventListener("click", (e) => {
+  const button = e.target.closest("button");
+
+  if (!button) return;
+
+  const action = button.dataset.action;
+  const sku = button.dataset.sku;
+
+  const itemIndex = cartItems.findIndex((item) => item.sku === sku);
+  const item = cartItems[itemIndex];
+
+  const { stock, quantity } = item;
+
+  if (!item) return;
+
+  // * Increment
+  if (action === "increment") {
+    if (quantity >= stock) return;
+
+    cartItems[itemIndex] = {
+      ...cartItems[itemIndex],
+      quantity: item.quantity + 1,
+    };
+  }
+
+  // * Decrement
+  if (action === "decrement") {
+    if (quantity <= 1) return;
+
+    cartItems[itemIndex] = {
+      ...cartItems[itemIndex],
+      quantity: item.quantity - 1,
+    };
+  }
+
+  render();
+});
+
 // * Helper functions
 function formatPrice(price) {
   if (Number.isInteger(price)) return price;
   else return price.toFixed(2);
-    
 }
 
 function formatSize(size) {
-    let formattedSize = size;
+  let formattedSize = size;
 
-    if (typeof size !== "number") {
-        switch (size) {
-            case "xs":
-                formattedSize = "Extra Small";
-                break;
-            case "sm":
-                formattedSize = "Small";
-                break;
-            case "md":
-                formattedSize = "Medium";
-                break;
-            case "lg":
-                formattedSize = "Large";
-                break;
-            case "xl":
-                formattedSize = "Extra Large";
-                break;
-            default:
-                formattedSize = "";
-        }
-        return formattedSize;
-    } else {
-        return formattedSize;
+  if (typeof size !== "number") {
+    switch (size) {
+      case "xs":
+        formattedSize = "Extra Small";
+        break;
+      case "sm":
+        formattedSize = "Small";
+        break;
+      case "md":
+        formattedSize = "Medium";
+        break;
+      case "lg":
+        formattedSize = "Large";
+        break;
+      case "xl":
+        formattedSize = "Extra Large";
+        break;
+      default:
+        formattedSize = "";
     }
+    return formattedSize;
+  } else {
+    return formattedSize;
+  }
 }
-
-// console.log(formatSize(6))
