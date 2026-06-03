@@ -99,9 +99,12 @@ const cartItems = [
 
 // * Global constants
 const cartItemsContainer = document.getElementById("cartItemsContainer");
+const subtotal = document.getElementById("subtotal");
 
 // * Initial render
 render();
+
+renderSubtotal();
 
 // * Rendering functions
 function renderCartItems(cartItems) {
@@ -177,9 +180,9 @@ function renderCartItems(cartItems) {
               >
 
               <div class="ml-auto">
-                <span class="text-lg text-neutral-900 font-medium">$${formatPrice(sale_price)}</span>
+                <span class="text-lg text-neutral-900 font-medium">$${formatPrice(sale_price * quantity)}</span>
                 <span class="text-neutral-600 text-[12px] line-through"
-                  >${discount || discount_percentage ? `$${formatPrice(list_price)}` : ""}</span
+                  >${discount || discount_percentage ? `$${formatPrice(list_price * quantity)}` : ""}</span
                 >
               </div>
             </div>
@@ -191,6 +194,10 @@ function renderCartItems(cartItems) {
 
 function render() {
   cartItemsContainer.innerHTML = renderCartItems(cartItems);
+}
+
+function renderSubtotal() {
+  subtotal.innerText = `$${formatPrice(calculateSubtotal(cartItems))}`;
 }
 
 // * Event listeners
@@ -213,9 +220,10 @@ cartItemsContainer.addEventListener("click", (e) => {
   if (action === "increment") {
     if (quantity >= stock) return;
 
+    // ? Update cart state
     cartItems[itemIndex] = {
       ...cartItems[itemIndex],
-      quantity: item.quantity + 1,
+      quantity: quantity + 1,
     };
   }
 
@@ -223,13 +231,19 @@ cartItemsContainer.addEventListener("click", (e) => {
   if (action === "decrement") {
     if (quantity <= 1) return;
 
+    // ? Update cart state
     cartItems[itemIndex] = {
       ...cartItems[itemIndex],
-      quantity: item.quantity - 1,
+      quantity: quantity - 1,
     };
   }
 
+  console.log(cartItems[itemIndex]);
+
+  // ? Re-render cart items
   render();
+  // ? Update subtotal
+  renderSubtotal();
 });
 
 // * Helper functions
@@ -265,4 +279,10 @@ function formatSize(size) {
   } else {
     return formattedSize;
   }
+}
+
+function calculateSubtotal(items) {
+  return items.reduce((subtotal, item) => {
+    return subtotal + item.sale_price * item.quantity;
+  }, 0);
 }
