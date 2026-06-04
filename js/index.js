@@ -101,7 +101,9 @@ let cartItems = [
 
 // * Global constants
 const cartItemsContainer = document.getElementById("cartItemsContainer");
+const emptyCartContainer = document.getElementById("emptyCartContainer");
 const subtotal = document.getElementById("subtotal");
+const rightSection = document.getElementById("rightSection");
 
 // * Initial render
 render();
@@ -110,12 +112,12 @@ renderSubtotal();
 
 // * Rendering functions
 function renderCartItems(cartItems) {
-//   // ! If cart is empty display empty cart
-//   if (!cartItems.length) console.log("Empty Cart! Nothing to render");
+  // ! If cart is empty display empty cart
+  if (!cartItems.length) console.log("Empty Cart! Nothing to render");
 
-//   if (!cartItems.length) {
-//     // 
-//   }
+  if (!cartItems.length) {
+     return renderEmptyState();
+  }
 
   return cartItems
     .map((item) => {
@@ -203,6 +205,38 @@ function renderCartItems(cartItems) {
     .join("");
 }
 
+function renderEmptyState() {
+  // ? Hide cart items container / left section
+  cartItemsContainer.classList.add("hidden");
+  // ? Hide order summary / right section
+  rightSection.classList.add("hidden");
+
+  emptyCartContainer.innerHTML = `
+        <div id="empty-state-message" class="flex flex-col gap-5 items-center xl:col-span-5">
+              <div class="w-12 h-12 shadow flex justify-center items-center rounded-full">
+                <i class="ri-shopping-cart-2-line text-2xl text-indigo-500"></i>
+              </div>
+              <div class="text-neutral-900 flex flex-col gap-2 text-center">
+                <p class="text-xl font-medium">Your cart is empty</p>
+                <p class="">Let's go explore some products</p>
+              </div>
+              <div class="">
+                <button class="text-white text-center bg-indigo-700 font-medium py-2.5 px-4 rounded flex gap-1.5 items-center hover:bg-indigo-800 shadow-md focus:ring-4 focus:bg-indigo-800 focus:ring-neutral-200 disabled:bg-neutral-100 disabled:text-neutral-400 disabled:shadow-none">
+                    <span>Explore products</span>
+                    <i class="ri-arrow-right-line text-xl"></i>
+                </button>
+              </div>
+        </div>
+        
+        <div class="flex justify-center items-center xl:col-span-7">
+        <img
+          src="./img/emptyCart.png"
+          alt="cart empty images"
+          class="object-cover"
+        />
+        </div>`;
+}
+
 function render() {
   cartItemsContainer.innerHTML = renderCartItems(cartItems);
 }
@@ -222,9 +256,9 @@ cartItemsContainer.addEventListener("click", (e) => {
 
   const itemIndex = cartItems.findIndex((item) => item.sku === sku);
   const item = cartItems[itemIndex];
-  
+
   if (!item) return;
-  
+
   const { stock, quantity } = item;
 
   // * Increment
@@ -254,7 +288,7 @@ cartItemsContainer.addEventListener("click", (e) => {
     cartItems = cartItems.filter((item) => item.sku !== sku);
   }
 
-  console.log(cartItems[itemIndex]);
+  //   console.log(cartItems[itemIndex]);
 
   // ? Re-render cart items
   render();

@@ -31,7 +31,7 @@
 
   <body class="bg-gradient-to-r from-[#F9FAFB] to-[#D2D6DB] min-h-screen p-4">
     <div
-      class="grid-container mx-auto items-start bg-white relative w-full px-4 py-12 shadow-sm rounded-md grid grid-cols-4 gap-x-4 md:grid-cols-6 md:py-16 md:gap-x-8 xl:grid-cols-12"
+      class="grid-container mx-auto items-start bg-white relative w-full px-4 py-12 shadow-sm rounded-md grid grid-cols-4 gap-x-4 md:grid-cols-6 md:py-16 md:gap-x-8 xl:grid-cols-12 min-h-screen"
     >
       <!-- Heading text -->
       <h1
@@ -45,11 +45,12 @@
         id="cartItemsContainer"
         class="left-section col-span-4 md:col-span-6 xl:col-span-8"
       >
-      <!-- Dynamic data -->
+        <!-- Dynamic data -->
       </div>
 
       <!-- Right section -->
       <div
+        id="rightSection"
         class="right-section col-span-4 md:col-span-6 xl:col-span-4 border border-neutral-200 rounded-lg p-4 flex flex-col gap-y-8"
       >
         <h2 class="text-2xl font-semibold text-neutral-900">Order Summary</h2>
@@ -57,7 +58,10 @@
         <div class="">
           <div class="flex justify-between mb-4">
             <div class="text-neutral-600">Subtotal</div>
-            <div id="subtotal" class="text-lg font-semibold text-neutral-900"></div>
+            <div
+              id="subtotal"
+              class="text-lg font-semibold text-neutral-900"
+            ></div>
           </div>
           <div class="shipping flex justify-between mb-4">
             <p class="text-neutral-600">Shipping</p>
@@ -87,6 +91,12 @@
           </button>
         </div>
       </div>
+
+      <!--  Empty state markup -->
+        <div id="emptyCartContainer" class="col-span-4 md:col-span-6 xl:col-span-12
+        grid gap-8 xl:grid-cols-12 items-center h-full content-between">
+          <!--  -->
+        </div>
     </div>
 
     <!-- Attribute this challenge to yourself! -->
