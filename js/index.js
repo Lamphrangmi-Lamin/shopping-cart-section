@@ -1,147 +1,135 @@
-//* State / source of truth
-let cartItems = [
-  {
-    sku: "ss-orange-xs",
-    product_id: "stepsoft-socks",
-    name: "StepSoft Socks",
-    description:
-      "Step into luxury with our StepSoft Socks, designed to pamper your feet with every step. Their cloud-like cushioning is like a spa for your soles.",
-    color: "orange",
-    size: "xs",
-    quantity: 1,
-
-    list_price: 25,
-    sale_price: 22.5,
-    discount: 2.5,
-    discount_percentage: null,
-
-    sold: 200,
-    stock: 10,
-
-    image_url:
-      "https://vaqybtnqyonvlwtskzmv.supabase.co/storage/v1/object/public/e-commerce-track-images/stepsoft-socks/stepsoft-socks-1.jpg",
-
-    createdAt: Date.now(),
-  },
-
-  {
-    sku: "es-beige-6",
-    product_id: "elemental-sneakers",
-    name: "Elemental Sneakers",
-    description:
-      "Ground your steps in style with our Elemental Sneakers. Designed with the elements in mind, they bring a natural balance to your stride and your ensemble.",
-    color: "beige",
-    size: 6,
-    quantity: 1,
-
-    list_price: 100,
-    sale_price: 80,
-    discount: null,
-    discount_percentage: 20,
-
-    sold: 60,
-    stock: 440,
-
-    image_url:
-      "https://vaqybtnqyonvlwtskzmv.supabase.co/storage/v1/object/public/e-commerce-track-images/elemental-sneakers/elemental-sneakers-1.jpg",
-
-    createdAt: Date.now(),
-  },
-
-  {
-    sku: "aas-blue",
-    product_id: "azure-attitude-shades",
-    name: "Azure Attitude Shades",
-    description:
-      "Step out in style with our Azure Attitude Shades, featuring a bold blue tint and modern design. These sunglasses are not just an accessory but a statement of confidence.",
-    color: "blue",
-    size: null,
-    quantity: 1,
-
-    list_price: 45,
-    sale_price: 45,
-    discount: null,
-    discount_percentage: null,
-
-    sold: 65,
-    stock: 435,
-
-    image_url:
-      "https://vaqybtnqyonvlwtskzmv.supabase.co/storage/v1/object/public/e-commerce-track-images/azure-attitude-shades/azure-attitude-shades-1.jpg",
-
-    createdAt: Date.now(),
-  },
-
-  {
-    sku: "udbh-white",
-    product_id: "urban-drift-bucket-hat",
-    name: "Urban Drift Bucket Hat",
-    description:
-      "Navigate the urban jungle with our Urban Drift Bucket Hat. It's not only trendy but also practical, offering shade from the hustle and bustle.",
-    color: "white",
-    size: null,
-    quantity: 1,
-
-    list_price: 15,
-    sale_price: 15,
-    discount: null,
-    discount_percentage: null,
-
-    sold: 65,
-    stock: 435,
-
-    image_url:
-      "https://vaqybtnqyonvlwtskzmv.supabase.co/storage/v1/object/public/e-commerce-track-images/urban-drift-bucket-hat/urban-drift-bucket-hat-5.jpg",
-
-    createdAt: Date.now(),
-  },
-];
-
-// cartItems = [];
-
 // * Global constants
 const cartItemsContainer = document.getElementById("cartItemsContainer");
 const emptyCartContainer = document.getElementById("emptyCartContainer");
 const subtotal = document.getElementById("subtotal");
 const rightSection = document.getElementById("rightSection");
+const addCouponBtn = document.getElementById("addCouponBtn");
+const addCouponContainer = document.getElementById("addCouponContainer");
+const applyCouponBtn = document.getElementById("applyCouponBtn");
+const addCouponInput = addCouponContainer.querySelector("input");
+
+//* State / source of truth
+let cartItems = [];
+let inventory = [];
+let products = [];
+
+const fetchData = async (url) => {
+  const response = await fetch(url);
+  const result = await response.json();
+  return result;
+};
+
+async function init() {
+  // ? fetch cart data
+  const cart = await fetchData("../data/sample-cart.json");
+  cartItems = cart.items;
+
+  // ? fetch product descriptions
+  products = await fetchData("../data/products.json");
+
+  // ? fetch inventory
+  inventory = await fetchData("../data/inventory.json");
+
+  render();
+}
+
+init();
+
+// ? Event listeners
+  cartItemsContainer.addEventListener("click", (e) => {
+    const button = e.target.closest("button");
+
+    if (!button) return;
+
+    const action = button.dataset.action;
+    const sku = button.dataset.sku;
+
+    let variant = inventory.find((item) => item.sku === sku);
+    let cartItemIndex = cartItems.findIndex((item) => item.unit.sku === sku);
+
+    if (!variant) return;
+    if (!cartItems[cartItemIndex]) return;
+
+    // * Extract stock, and sold properties from variant
+    const { stock, sold } = variant;
+
+    // * Extract quantity, property from variant
+    const { quantity } = cartItems[cartItemIndex];
+
+    // * Increment
+    if (action === "increment") {
+      if (quantity >= stock) return;
+
+      // ? Update cart state
+      cartItems[cartItemIndex] = {
+        ...cartItems[cartItemIndex],
+        quantity: quantity + 1,
+      };
+
+      console.log(cartItems[cartItemIndex]);
+    }
+
+    // * Decrement
+    if (action === "decrement") {
+      if (quantity <= 1) return;
+
+      // ? Update cart state
+      cartItems[cartItemIndex] = {
+        ...cartItems[cartItemIndex],
+        quantity: quantity - 1,
+      };
+
+      console.log(cartItems[cartItemIndex]);
+    }
+
+    // console.log("Cart items after increment/decrement", cartItems);
+
+    // * Remove
+    if (action === "remove") {
+      cartItems = cartItems.filter((item) => item.unit.sku !== sku);
+    }
+
+    //   console.log(cartItems[itemIndex]);
+
+    // ? Re-render cart items
+    render();
+    // ? Update subtotal
+    // renderSubtotal();
+  });
 
 // * Initial render
-render();
 
-renderSubtotal();
+// renderSubtotal();
 
 // * Rendering functions
-function renderCartItems(cartItems) {
+function renderCartItems(cartItems, productInfo, inventory) {
   // ! If cart is empty display empty cart
   if (!cartItems.length) console.log("Empty Cart! Nothing to render");
 
   if (!cartItems.length) {
-     return renderEmptyState();
+    return renderEmptyState();
   }
 
   return cartItems
     .map((item) => {
-      const {
-        sku,
-        image_url,
-        list_price,
-        sale_price,
-        discount,
-        discount_percentage,
-        size,
-        color,
-        quantity,
-        stock,
-      } = item;
+      const { unit, product, quantity, total_list_price, total_sale_price } =
+        item;
+      const { image_url, size, color, sku, list_price, sale_price } = unit;
+
+      const { name, product_id } = product;
+
+      const variant = inventory.find((item) => item.sku === sku);
+
+      const { sold, stock, discount, discount_percentage } = variant;
 
       return `<div
           class="product-card flex gap-y-4 flex-col border-b-2 border-dotted border-neutral-200 pb-8 mb-8 last:border-b-0 md:flex-row md:gap-x-8"
-          id="${item.sku}"
+          id="${sku}"
         >
           <figure class="min-w-[280px] h-[200px]">
             <img
               class="w-full h-full object-cover rounded-lg md:w-[280px]"
-              src="${item.image_url}"
+              src="${image_url}"
               alt="product image"
             />
           </figure>
@@ -149,7 +137,7 @@ function renderCartItems(cartItems) {
           <!-- Card title -->
           <div class="flex flex-col gap-y-4">
             <h2 class="text-2xl font-medium text-neutral-900">
-              ${item.name}
+              ${name}
             </h2>
 
             <!-- Product specs -->
@@ -157,7 +145,7 @@ function renderCartItems(cartItems) {
 
             <!-- Product description -->
             <p class="text-sm text-neutral-600">
-              ${item.description}
+              ${getDescription(productInfo, product_id)}
             </p>
 
             <!-- Cart Controls -->
@@ -190,7 +178,7 @@ function renderCartItems(cartItems) {
                 class="text-sm text-neutral-600 font-medium ml-4 hover:text-neutral-900 focus:ring-4 focus:ring-neutral-200 rounded px-1 aria-disabled:text-neutral-400"
                 >
                 Remove
-                </button>
+              </button>
 
               <div class="ml-auto">
                 <span class="text-lg text-neutral-900 font-medium">$${formatPrice(sale_price * quantity)}</span>
@@ -237,63 +225,32 @@ function renderEmptyState() {
         </div>`;
 }
 
-function render() {
-  cartItemsContainer.innerHTML = renderCartItems(cartItems);
-}
+// function renderSubtotal() {
+//   subtotal.innerText = `$${formatPrice(calculateSubtotal(cartItems))}`;
+// }
 
-function renderSubtotal() {
-  subtotal.innerText = `$${formatPrice(calculateSubtotal(cartItems))}`;
+function render() {
+  cartItemsContainer.innerHTML = renderCartItems(
+    cartItems,
+    products,
+    inventory,
+  );
 }
 
 // * Event listeners
-cartItemsContainer.addEventListener("click", (e) => {
-  const button = e.target.closest("button");
 
-  if (!button) return;
+addCouponBtn.addEventListener("click", () => {
+  addCouponBtn.classList.add("hidden");
+  addCouponContainer.classList.remove("hidden");
+});
 
-  const action = button.dataset.action;
-  const sku = button.dataset.sku;
-
-  const itemIndex = cartItems.findIndex((item) => item.sku === sku);
-  const item = cartItems[itemIndex];
-
-  if (!item) return;
-
-  const { stock, quantity } = item;
-
-  // * Increment
-  if (action === "increment") {
-    if (quantity >= stock) return;
-
-    // ? Update cart state
-    cartItems[itemIndex] = {
-      ...cartItems[itemIndex],
-      quantity: quantity + 1,
-    };
-  }
-
-  // * Decrement
-  if (action === "decrement") {
-    if (quantity <= 1) return;
-
-    // ? Update cart state
-    cartItems[itemIndex] = {
-      ...cartItems[itemIndex],
-      quantity: quantity - 1,
-    };
-  }
-
-  // * Remove
-  if (action === "remove") {
-    cartItems = cartItems.filter((item) => item.sku !== sku);
-  }
-
-  //   console.log(cartItems[itemIndex]);
-
-  // ? Re-render cart items
-  render();
-  // ? Update subtotal
-  renderSubtotal();
+applyCouponBtn.addEventListener("click", () => {
+  const couponCodeContainer = addCouponContainer.querySelector(
+    ".couponCodeContainer",
+  );
+  const couponCode = document.getElementById("couponCode");
+  couponCode.innerText = addCouponInput.value;
+  couponCodeContainer.classList.remove("hidden");
 });
 
 // * Helper utility functions
@@ -303,7 +260,7 @@ function formatPrice(price) {
 }
 
 function formatSize(size) {
-  let formattedSize = size;
+  let formattedSize = size ? size : "";
 
   if (typeof size !== "number") {
     switch (size) {
@@ -322,8 +279,6 @@ function formatSize(size) {
       case "xl":
         formattedSize = "Extra Large";
         break;
-      default:
-        formattedSize = "";
     }
     return formattedSize;
   } else {
@@ -335,4 +290,8 @@ function calculateSubtotal(items) {
   return items.reduce((subtotal, item) => {
     return subtotal + item.sale_price * item.quantity;
   }, 0);
+}
+
+function getDescription(data, productId) {
+  return data.find((item) => item.product_id === productId).description;
 }

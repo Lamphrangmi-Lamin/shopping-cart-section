@@ -64,17 +64,73 @@
             ></div>
           </div>
           <div class="shipping flex justify-between mb-4">
-            <p class="text-neutral-600">Shipping</p>
-            <p class="text-lg font-semibold">FREE</p>
+            <div class="text-neutral-600">Shipping</div>
+            <div class="text-lg font-semibold">FREE</div>
           </div>
 
-          <div class="coupon text-indigo-700 font-medium flex justify-end">
-            <a
+          <div class="text-indigo-700 font-medium flex justify-end">
+            <button
+              data-action="add coupon"
+              id="addCouponBtn"
               aria-disabled="false"
               href="#"
               class="focus:ring-4 focus:ring-neutral-200 rounded px-1 aria-disabled:text-neutral-400"
-              ><i class="ri-coupon-line"></i> Add coupon code</a
             >
+              <i class="ri-coupon-line"></i> Add coupon code
+            </button>
+          </div>
+
+          <!-- Add coupon: success -->
+          <div class="flex justify-between mb-4 hidden">
+            <div
+              class="text-indigo-700 text-sm font-normal bg-indigo-50 border border-indigo-200 rounded-full px-2.5 py-1"
+            >
+              GR8FRNTND24
+            </div>
+            <div class="text-lg font-semibold">-$5.00</div>
+          </div>
+
+          <!-- Add coupon: active -->
+          <div id="addCouponContainer" class="flex flex-col gap-2 hidden">
+            <div class="flex flex-col gap-1.5">
+              <label
+                for="coupon"
+                class="text-neutral-700 text-sm font-medium mb-"
+                >Coupon code</label
+              >
+
+              <div class="flex items-start gap-2">
+                <div class="">
+                  <input
+                    id="coupon"
+                    type="text"
+                    placeholder="Enter coupon code"
+                    class="placeholder:text- text-sm font-normal bg-neutral-50 px-3.5 py-2.5 rounded border-neutral-200 border"
+                  />
+                  <span class="text-sm font-normal text-red-600 hidden"
+                    >Please enter a valid code.</span
+                  >
+                </div>
+                <button
+                  id="applyCouponBtn"
+                  class="px-3.5 py-2.5 text-neutral-900 text-sm font-medium border-[0.5px] rounded shadow border-neutral-200"
+                >
+                  Apply
+                </button>
+              </div>
+            </div>
+
+            <!-- Coupon code -->
+            <div
+              class="couponCodeContainer bg-gray-200 px-2 py-1 border-[0.5px] flex max-w-fit items-center justify-center gap-1 rounded hidden"
+            >
+              <span id="couponCode" class="text-neutral-900 text-sm font-medium"
+                ></span
+              >
+              <button>
+                <i class="ri-close-fill text-black text-xl"></i>
+              </button>
+            </div>
           </div>
 
           <hr class="border-dotted border-t-2 my-8" />
@@ -93,10 +149,12 @@
       </div>
 
       <!--  Empty state markup -->
-        <div id="emptyCartContainer" class="col-span-4 md:col-span-6 xl:col-span-12
-        grid gap-8 xl:grid-cols-12 items-center h-full content-between">
-          <!--  -->
-        </div>
+      <div
+        id="emptyCartContainer"
+        class="col-span-4 md:col-span-6 xl:col-span-12 grid gap-8 xl:grid-cols-12 items-center h-full content-between"
+      >
+        <!--  -->
+      </div>
     </div>
 
     <!-- Attribute this challenge to yourself! -->
