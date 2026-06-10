@@ -6,10 +6,10 @@ const rightSection = document.getElementById("rightSection");
 const addCouponBtn = document.getElementById("addCouponBtn");
 const addCouponContainer = document.getElementById("addCouponContainer");
 const applyCouponBtn = document.getElementById("applyCouponBtn");
-const addCouponInput = addCouponContainer.querySelector("input");
+// const addCouponInput = addCouponContainer.querySelector("input");
 
 //* State / source of truth
-let cartItems = [];
+let cart = {};
 let inventory = [];
 let products = [];
 
@@ -21,8 +21,7 @@ const fetchData = async (url) => {
 
 async function init() {
   // ? fetch cart data
-  const cart = await fetchData("../data/sample-cart.json");
-  cartItems = cart.items;
+  cart = await fetchData("../data/sample-cart.json");
 
   // ? fetch product descriptions
   products = await fetchData("../data/products.json");
@@ -36,70 +35,59 @@ async function init() {
 init();
 
 // ? Event listeners
-  cartItemsContainer.addEventListener("click", (e) => {
-    const button = e.target.closest("button");
+cartItemsContainer.addEventListener("click", (e) => {
+  const button = e.target.closest("button");
 
-    if (!button) return;
+  if (!button) return;
 
-    const action = button.dataset.action;
-    const sku = button.dataset.sku;
+  const action = button.dataset.action;
+  const sku = button.dataset.sku;
 
-    let variant = inventory.find((item) => item.sku === sku);
-    let cartItemIndex = cartItems.findIndex((item) => item.unit.sku === sku);
+  let variant = inventory.find((item) => item.sku === sku);
+  let cartItemIndex = cart.items.findIndex((item) => item.unit.sku === sku);
 
-    if (!variant) return;
-    if (!cartItems[cartItemIndex]) return;
+  if (!variant) return;
+  if (!cart.items[cartItemIndex]) return;
 
-    // * Extract stock, and sold properties from variant
-    const { stock, sold } = variant;
+  // * Extract stock, and sold properties from variant
+  const { stock, sold } = variant;
 
-    // * Extract quantity, property from variant
-    const { quantity } = cartItems[cartItemIndex];
+  // * Extract quantity, property from variant
+  const { quantity } = cart.items[cartItemIndex];
 
-    // * Increment
-    if (action === "increment") {
-      if (quantity >= stock) return;
+  // * Increment
+  if (action === "increment") {
+    if (quantity >= stock) return;
 
-      // ? Update cart state
-      cartItems[cartItemIndex] = {
-        ...cartItems[cartItemIndex],
-        quantity: quantity + 1,
-      };
+    // ? Update cart state
+    cart.items[cartItemIndex] = {
+      ...cart.items[cartItemIndex],
+      quantity: quantity + 1,
+    };
+  }
 
-      console.log(cartItems[cartItemIndex]);
-    }
+  // * Decrement
+  if (action === "decrement") {
+    if (quantity <= 1) return;
 
-    // * Decrement
-    if (action === "decrement") {
-      if (quantity <= 1) return;
+    // ? Update cart state
+    cart.items[cartItemIndex] = {
+      ...cart.items[cartItemIndex],
+      quantity: quantity - 1,
+    };
+  }
 
-      // ? Update cart state
-      cartItems[cartItemIndex] = {
-        ...cartItems[cartItemIndex],
-        quantity: quantity - 1,
-      };
+  // * Remove item from cart
+  if (action === "remove") {
+    cart.items = cart.items.filter((item) => item.unit.sku !== sku);
+  }
 
-      console.log(cartItems[cartItemIndex]);
-    }
+  updateCartSummary();
+  // console.log(cart.summary);
 
-    // console.log("Cart items after increment/decrement", cartItems);
-
-    // * Remove
-    if (action === "remove") {
-      cartItems = cartItems.filter((item) => item.unit.sku !== sku);
-    }
-
-    //   console.log(cartItems[itemIndex]);
-
-    // ? Re-render cart items
-    render();
-    // ? Update subtotal
-    // renderSubtotal();
-  });
-
-// * Initial render
-
-// renderSubtotal();
+  // ? Re-render cart items
+  render();
+});
 
 // * Rendering functions
 function renderCartItems(cartItems, productInfo, inventory) {
@@ -225,33 +213,132 @@ function renderEmptyState() {
         </div>`;
 }
 
-// function renderSubtotal() {
-//   subtotal.innerText = `$${formatPrice(calculateSubtotal(cartItems))}`;
-// }
-
 function render() {
   cartItemsContainer.innerHTML = renderCartItems(
-    cartItems,
+    cart.items,
     products,
     inventory,
   );
+
+  rightSection.innerHTML = renderSummary(cart.summary);
+}
+
+function renderSummary(summaryData) {
+  const { subtotal, total, discount_code, discount, shipping } = summaryData;
+
+  return `
+  <h2 class="text-2xl font-semibold text-neutral-900">Order Summary</h2>
+        <!-- subtotal & shipping -->
+        <div class="">
+          <div class="flex justify-between mb-4">
+            <div class="text-neutral-600">Subtotal</div>
+            <div
+              id="subtotal"
+              class="text-lg font-semibold text-neutral-900"
+            >$${formatPrice(subtotal)}</div>
+          </div>
+          <div class="shipping flex justify-between mb-4">
+            <div class="text-neutral-600">Shipping</div>
+            <div class="text-lg font-semibold">${shipping ? `$${shipping}` : "FREE"}</div>
+          </div>
+
+          <div class="text-indigo-700 font-medium flex justify-end">
+            <button
+              data-action="add coupon"
+              id="addCouponBtn"
+              aria-disabled="false"
+              href="#"
+              class="focus:ring-4 focus:ring-neutral-200 rounded px-1 aria-disabled:text-neutral-400"
+            >
+              <i class="ri-coupon-line"></i> Add coupon code
+            </button>
+          </div>
+
+          <!-- Add coupon: success -->
+          <div class="flex justify-between mb-4 hidden">
+            <div
+              class="text-indigo-700 text-sm font-normal bg-indigo-50 border border-indigo-200 rounded-full px-2.5 py-1"
+            >
+              GR8FRNTND24
+            </div>
+            <div class="text-lg font-semibold">-$5.00</div>
+          </div>
+
+          <!-- Add coupon: active -->
+          <div id="addCouponContainer" class="flex flex-col gap-2 hidden">
+            <div class="flex flex-col gap-1.5">
+              <label
+                for="coupon"
+                class="text-neutral-700 text-sm font-medium mb-"
+                >Coupon code</label
+              >
+
+              <div class="flex items-start gap-2">
+                <div class="">
+                  <input
+                    id="coupon"
+                    type="text"
+                    placeholder="Enter coupon code"
+                    class="placeholder:text- text-sm font-normal bg-neutral-50 px-3.5 py-2.5 rounded border-neutral-200 border"
+                  />
+                  <span class="text-sm font-normal text-red-600 hidden"
+                    >Please enter a valid code.</span
+                  >
+                </div>
+                <button
+                  id="applyCouponBtn"
+                  class="px-3.5 py-2.5 text-neutral-900 text-sm font-medium border-[0.5px] rounded shadow border-neutral-200"
+                >
+                  Apply
+                </button>
+              </div>
+            </div>
+
+            <!-- Coupon code -->
+            <div
+              class="couponCodeContainer bg-gray-200 px-2 py-1 border-[0.5px] flex max-w-fit items-center justify-center gap-1 rounded"
+            >
+              <span id="couponCode" class="text-neutral-900 text-sm font-medium"
+                ></span
+              >
+              <button>
+                <i class="ri-close-fill text-black text-xl"></i>
+              </button>
+            </div>
+          </div>
+
+          <hr class="border-dotted border-t-2 my-8" />
+        </div>
+
+        <!-- Total -->
+        <div class="total flex justify-between">
+          <div class="text-2xl font-medium">Total</div>
+          <div class="text-4xl font-semibold">$${formatPrice(total)}</div>
+        </div>
+        <div class="checkout-button">
+          <button
+            class="font-medium w-full bg-indigo-700 text-white hover:bg-indigo-800 shadow-md focus:ring-4 focus:bg-indigo-800 focus:ring-neutral-200 disabled:bg-neutral-100 disabled:text-neutral-400 disabled:shadow-none py-3 rounded"
+          >
+            Checkout
+          </button>
+        </div>`;
 }
 
 // * Event listeners
 
-addCouponBtn.addEventListener("click", () => {
-  addCouponBtn.classList.add("hidden");
-  addCouponContainer.classList.remove("hidden");
-});
+// addCouponBtn.addEventListener("click", () => {
+//   addCouponBtn.classList.add("hidden");
+//   addCouponContainer.classList.remove("hidden");
+// });
 
-applyCouponBtn.addEventListener("click", () => {
-  const couponCodeContainer = addCouponContainer.querySelector(
-    ".couponCodeContainer",
-  );
-  const couponCode = document.getElementById("couponCode");
-  couponCode.innerText = addCouponInput.value;
-  couponCodeContainer.classList.remove("hidden");
-});
+// applyCouponBtn.addEventListener("click", () => {
+//   const couponCodeContainer = addCouponContainer.querySelector(
+//     ".couponCodeContainer",
+//   );
+//   const couponCode = document.getElementById("couponCode");
+//   couponCode.innerText = addCouponInput.value;
+//   couponCodeContainer.classList.remove("hidden");
+// });
 
 // * Helper utility functions
 function formatPrice(price) {
@@ -286,12 +373,23 @@ function formatSize(size) {
   }
 }
 
-function calculateSubtotal(items) {
-  return items.reduce((subtotal, item) => {
-    return subtotal + item.sale_price * item.quantity;
+function calculateSubtotal(cartItems) {
+  return cartItems.reduce((subtotal, item) => {
+    return subtotal + item.unit.sale_price * item.quantity;
   }, 0);
 }
 
 function getDescription(data, productId) {
   return data.find((item) => item.product_id === productId).description;
+}
+
+function updateCartSummary() {
+  const subtotal = calculateSubtotal(cart.items);
+
+  // Update cart summary
+  cart.summary = {
+    ...cart.summary,
+    subtotal,
+    total: subtotal,
+  };
 }
