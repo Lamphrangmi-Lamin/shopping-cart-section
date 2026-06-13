@@ -12,6 +12,10 @@ const applyCouponBtn = document.getElementById("applyCouponBtn");
 let cart = {};
 let inventory = [];
 let products = [];
+let coupons = [];
+let enteredCoupon = null;
+let isCouponFormOpen = false;
+let appliedCoupon = null;
 
 const fetchData = async (url) => {
   const response = await fetch(url);
@@ -29,10 +33,16 @@ async function init() {
   // ? fetch inventory
   inventory = await fetchData("../data/inventory.json");
 
+  // ? fetch coupons
+  coupons = await fetchData("../data/coupons.json");
+
   render();
 }
 
 init();
+
+const couponInputVal = document.querySelector("#coupon-input");
+console.log(couponInputVal);
 
 // ? Event listeners
 cartItemsContainer.addEventListener("click", (e) => {
@@ -82,10 +92,56 @@ cartItemsContainer.addEventListener("click", (e) => {
     cart.items = cart.items.filter((item) => item.unit.sku !== sku);
   }
 
+  // ? Update cart subtotal
   updateCartSummary();
-  // console.log(cart.summary);
 
   // ? Re-render cart items
+  render();
+});
+
+rightSection.addEventListener("click", (e) => {
+  const button = e.target.closest("button");
+
+  if (!button) return;
+
+  const action = button.dataset.action;
+
+  // * Add a coupon
+  if (action === "add-coupon") {
+    console.log(coupons);
+    isCouponFormOpen = true;
+  }
+
+  // * Apply coupon
+  if (action === "apply-coupon") {
+    enteredCoupon = rightSection.querySelector("#coupon-input").value;
+
+    if (!enteredCoupon.length) return;
+
+    const coupon = coupons.find((item) => item.coupon_code === enteredCoupon);
+
+    if (!coupon) return;
+
+    appliedCoupon = coupon;
+
+    const { coupon_code, discount_amount, discount_percentage } = coupon;
+
+    // * Update cart summary
+    cart.summary = {
+      ...cart.summary,
+      discount_code: coupon_code,
+      discount: discount_amount
+        ? discount_amount
+        : calculateDiscountAmount(discount_percentage, cart.summary.subtotal),
+    };
+
+    console.log(cart.summary, "cart summary after coupon applied");
+
+    console.log(enteredCoupon);
+    console.log(coupons);
+  }
+
+  updateCartSummary();
   render();
 });
 
@@ -93,10 +149,6 @@ cartItemsContainer.addEventListener("click", (e) => {
 function renderCartItems(cartItems, productInfo, inventory) {
   // ! If cart is empty display empty cart
   if (!cartItems.length) console.log("Empty Cart! Nothing to render");
-
-  if (!cartItems.length) {
-    return renderEmptyState();
-  }
 
   return cartItems
     .map((item) => {
@@ -182,12 +234,7 @@ function renderCartItems(cartItems, productInfo, inventory) {
 }
 
 function renderEmptyState() {
-  // ? Hide cart items container / left section
-  cartItemsContainer.classList.add("hidden");
-  // ? Hide order summary / right section
-  rightSection.classList.add("hidden");
-
-  emptyCartContainer.innerHTML = `
+  return `
         <div id="empty-state-message" class="flex flex-col gap-5 items-center xl:col-span-5">
               <div class="w-12 h-12 shadow flex justify-center items-center rounded-full">
                 <i class="ri-shopping-cart-2-line text-2xl text-indigo-500"></i>
@@ -214,6 +261,17 @@ function renderEmptyState() {
 }
 
 function render() {
+  // ? If cart is empty then render cart empty state markup
+  if (!cart.items.length) {
+    cartItemsContainer.innerHTML = "";
+    rightSection.innerHTML = "";
+    emptyCartContainer.innerHTML = renderEmptyState();
+    rightSection.innerHTML = "";
+    rightSection.classList.add("hidden");
+    return;
+  }
+
+  rightSection.classList.remove("hidden");
   cartItemsContainer.innerHTML = renderCartItems(
     cart.items,
     products,
@@ -221,10 +279,12 @@ function render() {
   );
 
   rightSection.innerHTML = renderSummary(cart.summary);
+  // console.log(cart);
 }
 
 function renderSummary(summaryData) {
   const { subtotal, total, discount_code, discount, shipping } = summaryData;
+  // const { discount_amount, discount_percentage } = appliedCoupon;
 
   return `
   <h2 class="text-2xl font-semibold text-neutral-900">Order Summary</h2>
@@ -242,9 +302,10 @@ function renderSummary(summaryData) {
             <div class="text-lg font-semibold">${shipping ? `$${shipping}` : "FREE"}</div>
           </div>
 
-          <div class="text-indigo-700 font-medium flex justify-end">
+          <div class="text-indigo-700 font-medium flex justify-end
+          ${isCouponFormOpen ? "hidden" : ""}">
             <button
-              data-action="add coupon"
+              data-action="add-coupon"
               id="addCouponBtn"
               aria-disabled="false"
               href="#"
@@ -255,20 +316,21 @@ function renderSummary(summaryData) {
           </div>
 
           <!-- Add coupon: success -->
-          <div class="flex justify-between mb-4 hidden">
+          <div class="flex justify-between mb-4 ${discount_code ? "" : "hidden"}">
             <div
               class="text-indigo-700 text-sm font-normal bg-indigo-50 border border-indigo-200 rounded-full px-2.5 py-1"
             >
-              GR8FRNTND24
+              ${discount_code}
             </div>
-            <div class="text-lg font-semibold">-$5.00</div>
+            <div class="text-lg font-semibold">-${appliedCoupon?.discount_amount ? `$${formatPrice(appliedCoupon.discount_amount)}` : `${appliedCoupon?.discount_percentage}%`}</div>
           </div>
 
-          <!-- Add coupon: active -->
-          <div id="addCouponContainer" class="flex flex-col gap-2 hidden">
+          <!-- Add coupon form: active -->
+          <div id="addCouponContainer" class="flex flex-col gap-2
+          ${isCouponFormOpen ? "" : "hidden"}">
             <div class="flex flex-col gap-1.5">
               <label
-                for="coupon"
+                for="coupon-input"
                 class="text-neutral-700 text-sm font-medium mb-"
                 >Coupon code</label
               >
@@ -276,8 +338,9 @@ function renderSummary(summaryData) {
               <div class="flex items-start gap-2">
                 <div class="">
                   <input
-                    id="coupon"
+                    id="coupon-input"
                     type="text"
+                    value=""
                     placeholder="Enter coupon code"
                     class="placeholder:text- text-sm font-normal bg-neutral-50 px-3.5 py-2.5 rounded border-neutral-200 border"
                   />
@@ -286,6 +349,7 @@ function renderSummary(summaryData) {
                   >
                 </div>
                 <button
+                  data-action="apply-coupon"
                   id="applyCouponBtn"
                   class="px-3.5 py-2.5 text-neutral-900 text-sm font-medium border-[0.5px] rounded shadow border-neutral-200"
                 >
@@ -296,12 +360,11 @@ function renderSummary(summaryData) {
 
             <!-- Coupon code -->
             <div
-              class="couponCodeContainer bg-gray-200 px-2 py-1 border-[0.5px] flex max-w-fit items-center justify-center gap-1 rounded"
+              class="couponCodeContainer bg-gray-200 px-2 py-1 border-[0.5px] flex max-w-fit items-center justify-center gap-1 rounded ${discount_code ? "" : "hidden"}"
             >
               <span id="couponCode" class="text-neutral-900 text-sm font-medium"
-                ></span
-              >
-              <button>
+                >${!discount_code ? "" : discount_code}</span>
+              <button
                 <i class="ri-close-fill text-black text-xl"></i>
               </button>
             </div>
@@ -323,22 +386,6 @@ function renderSummary(summaryData) {
           </button>
         </div>`;
 }
-
-// * Event listeners
-
-// addCouponBtn.addEventListener("click", () => {
-//   addCouponBtn.classList.add("hidden");
-//   addCouponContainer.classList.remove("hidden");
-// });
-
-// applyCouponBtn.addEventListener("click", () => {
-//   const couponCodeContainer = addCouponContainer.querySelector(
-//     ".couponCodeContainer",
-//   );
-//   const couponCode = document.getElementById("couponCode");
-//   couponCode.innerText = addCouponInput.value;
-//   couponCodeContainer.classList.remove("hidden");
-// });
 
 // * Helper utility functions
 function formatPrice(price) {
@@ -379,17 +426,31 @@ function calculateSubtotal(cartItems) {
   }, 0);
 }
 
+function calculateDiscountAmount(discountPercentage, subtotal) {
+  return (discountPercentage / 100) * subtotal;
+}
+
 function getDescription(data, productId) {
   return data.find((item) => item.product_id === productId).description;
 }
 
 function updateCartSummary() {
   const subtotal = calculateSubtotal(cart.items);
+  let discount = 0;
 
-  // Update cart summary
+  const { shipping } = cart.summary;
+
+  if (appliedCoupon) {
+    discount = appliedCoupon.discount_amount
+      ? appliedCoupon.discount_amount
+      : calculateDiscountAmount(appliedCoupon.discount_percentage, subtotal);
+  }
+
+  // ? Update cart summary
   cart.summary = {
     ...cart.summary,
     subtotal,
-    total: subtotal,
+    discount,
+    total: Math.max(0, subtotal - discount + shipping),
   };
 }
