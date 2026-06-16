@@ -41,9 +41,6 @@ async function init() {
 
 init();
 
-const couponInputVal = document.querySelector("#coupon-input");
-console.log(couponInputVal);
-
 // ? Event listeners
 cartItemsContainer.addEventListener("click", (e) => {
   const button = e.target.closest("button");
@@ -108,7 +105,6 @@ rightSection.addEventListener("click", (e) => {
 
   // * Add a coupon
   if (action === "add-coupon") {
-    console.log(coupons);
     isCouponFormOpen = true;
   }
 
@@ -134,14 +130,26 @@ rightSection.addEventListener("click", (e) => {
         ? discount_amount
         : calculateDiscountAmount(discount_percentage, cart.summary.subtotal),
     };
-
-    console.log(cart.summary, "cart summary after coupon applied");
-
-    console.log(enteredCoupon);
-    console.log(coupons);
   }
 
+  // * Remove coupon
+  if (action === "remove-coupon") {
+    console.log("remove coupon btn clicked!");
+
+    // * Remove applied coupon first
+    appliedCoupon = null;
+
+    // * Update state
+    cart.summary =  {
+      ...cart.summary,
+      discount_code: null,
+    }
+  }
+
+  // * update subtotal & total
   updateCartSummary();
+
+  // * Re-render
   render();
 });
 
@@ -279,12 +287,10 @@ function render() {
   );
 
   rightSection.innerHTML = renderSummary(cart.summary);
-  // console.log(cart);
 }
 
 function renderSummary(summaryData) {
   const { subtotal, total, discount_code, discount, shipping } = summaryData;
-  // const { discount_amount, discount_percentage } = appliedCoupon;
 
   return `
   <h2 class="text-2xl font-semibold text-neutral-900">Order Summary</h2>
@@ -364,7 +370,7 @@ function renderSummary(summaryData) {
             >
               <span id="couponCode" class="text-neutral-900 text-sm font-medium"
                 >${!discount_code ? "" : discount_code}</span>
-              <button
+              <button data-action="remove-coupon">
                 <i class="ri-close-fill text-black text-xl"></i>
               </button>
             </div>
