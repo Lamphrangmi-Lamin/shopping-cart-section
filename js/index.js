@@ -12,29 +12,32 @@ const applyCouponBtn = document.getElementById("applyCouponBtn");
 let cart = {};
 let inventory = [];
 let products = [];
-let coupons = [];
-let enteredCoupon = null;
+// let coupons = [];
+let enteredCouponCode = "";
 let isCouponFormOpen = false;
 let appliedCoupon = null;
+let errorMessage = "";
 
-const fetchData = async (url) => {
-  const response = await fetch(url);
-  const result = await response.json();
-  return result;
+const apiRequest = async (url, options = {}) => {
+  const response = await fetch(url, options);
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(`${data.error}`);
+  }
+  return data;
 };
 
 async function init() {
   // ? fetch cart data
-  cart = await fetchData("../data/sample-cart.json");
+  cart = await apiRequest(
+    "https://www.greatfrontend.com/api/projects/challenges/e-commerce/cart-sample",
+  );
 
   // ? fetch product descriptions
-  products = await fetchData("../data/products.json");
+  products = await apiRequest("../data/products.json");
 
   // ? fetch inventory
-  inventory = await fetchData("../data/inventory.json");
-
-  // ? fetch coupons
-  coupons = await fetchData("../data/coupons.json");
+  inventory = await apiRequest("../data/inventory.json");
 
   render();
 }
@@ -96,7 +99,7 @@ cartItemsContainer.addEventListener("click", (e) => {
   render();
 });
 
-rightSection.addEventListener("click", (e) => {
+rightSection.addEventListener("click", async (e) => {
   const button = e.target.closest("button");
 
   if (!button) return;
@@ -110,17 +113,43 @@ rightSection.addEventListener("click", (e) => {
 
   // * Apply coupon
   if (action === "apply-coupon") {
-    enteredCoupon = rightSection.querySelector("#coupon-input").value;
+    enteredCouponCode = rightSection.querySelector("#coupon-input").value;
 
-    if (!enteredCoupon.length) return;
+    if (!enteredCouponCode.trim()) {
+      errorMessage = "Please enter a valid code.";
+      render();
+      return;
+    }
 
-    const coupon = coupons.find((item) => item.coupon_code === enteredCoupon);
+    try {
+      // ? fetch coupon
+      appliedCoupon = await apiRequest(
+        "https://www.greatfrontend.com/api/projects/challenges/e-commerce/coupons/apply",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            coupon_code: enteredCouponCode,
+          }),
+        },
+      );
 
-    if (!coupon) return;
+      // ! Error handling
+    } catch (error) {
+      if (enteredCouponCode) {
+        errorMessage = "Sorry, but this coupon doesn't exist.";
+      }
+      render();
+      return;
+    }
 
-    appliedCoupon = coupon;
+    // * Reset errorMessage and input field
+    errorMessage = "";
+    enteredCouponCode = "";
 
-    const { coupon_code, discount_amount, discount_percentage } = coupon;
+    const { coupon_code, discount_amount, discount_percentage } = appliedCoupon;
 
     // * Update cart summary
     cart.summary = {
@@ -134,16 +163,14 @@ rightSection.addEventListener("click", (e) => {
 
   // * Remove coupon
   if (action === "remove-coupon") {
-    console.log("remove coupon btn clicked!");
-
     // * Remove applied coupon first
     appliedCoupon = null;
 
     // * Update state
-    cart.summary =  {
+    cart.summary = {
       ...cart.summary,
       discount_code: null,
-    }
+    };
   }
 
   // * update subtotal & total
@@ -346,18 +373,20 @@ function renderSummary(summaryData) {
                   <input
                     id="coupon-input"
                     type="text"
-                    value=""
+                    value="${enteredCouponCode}"
                     placeholder="Enter coupon code"
-                    class="placeholder:text- text-sm font-normal bg-neutral-50 px-3.5 py-2.5 rounded border-neutral-200 border"
+                    class="placeholder:text- text-sm font-normal bg-neutral-50 px-3.5 py-2.5 rounded border-neutral-200 border focus:border-indigo-600 focus:outline-indigo-200 focus:outline
+                    disabled:cursor-not-allowed disabled:border-neutral-100 disabled:text-neutral-400 disabled:placeholder:text-neutral-400"
                   />
-                  <span class="text-sm font-normal text-red-600 hidden"
-                    >Please enter a valid code.</span
-                  >
+                  <div class="text-sm font-normal text-red-600 ${errorMessage ? "" : "hidden"}">
+                  ${errorMessage ? errorMessage : ""}
+                  </div>
                 </div>
                 <button
                   data-action="apply-coupon"
                   id="applyCouponBtn"
-                  class="px-3.5 py-2.5 text-neutral-900 text-sm font-medium border-[0.5px] rounded shadow border-neutral-200"
+                  class="px-3.5 py-2.5 text-neutral-900 text-sm font-medium border-[0.5px] rounded shadow border-neutral-200
+                  hover:bg-neutral-50"
                 >
                   Apply
                 </button>
