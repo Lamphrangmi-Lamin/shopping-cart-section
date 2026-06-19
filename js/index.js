@@ -6,13 +6,9 @@ const rightSection = document.getElementById("rightSection");
 const addCouponBtn = document.getElementById("addCouponBtn");
 const addCouponContainer = document.getElementById("addCouponContainer");
 const applyCouponBtn = document.getElementById("applyCouponBtn");
-// const addCouponInput = addCouponContainer.querySelector("input");
 
 //* State / source of truth
 let cart = {};
-let inventory = [];
-let products = [];
-// let coupons = [];
 let enteredCouponCode = "";
 let isCouponFormOpen = false;
 let appliedCoupon = null;
@@ -33,12 +29,6 @@ async function init() {
     "https://www.greatfrontend.com/api/projects/challenges/e-commerce/cart-sample",
   );
 
-  // ? fetch product descriptions
-  products = await apiRequest("../data/products.json");
-
-  // ? fetch inventory
-  inventory = await apiRequest("../data/inventory.json");
-
   render();
 }
 
@@ -53,14 +43,12 @@ cartItemsContainer.addEventListener("click", (e) => {
   const action = button.dataset.action;
   const sku = button.dataset.sku;
 
-  let variant = inventory.find((item) => item.sku === sku);
   let cartItemIndex = cart.items.findIndex((item) => item.unit.sku === sku);
 
-  if (!variant) return;
   if (!cart.items[cartItemIndex]) return;
 
   // * Extract stock, and sold properties from variant
-  const { stock, sold } = variant;
+  const { stock } = cart.items[cartItemIndex].unit;
 
   // * Extract quantity, property from variant
   const { quantity } = cart.items[cartItemIndex];
@@ -181,7 +169,7 @@ rightSection.addEventListener("click", async (e) => {
 });
 
 // * Rendering functions
-function renderCartItems(cartItems, productInfo, inventory) {
+function renderCartItems(cartItems) {
   // ! If cart is empty display empty cart
   if (!cartItems.length) console.log("Empty Cart! Nothing to render");
 
@@ -189,13 +177,11 @@ function renderCartItems(cartItems, productInfo, inventory) {
     .map((item) => {
       const { unit, product, quantity, total_list_price, total_sale_price } =
         item;
-      const { image_url, size, color, sku, list_price, sale_price } = unit;
 
-      const { name, product_id } = product;
+      const { image_url, size, color, sku, list_price, sale_price, stock } =
+        unit;
 
-      const variant = inventory.find((item) => item.sku === sku);
-
-      const { sold, stock, discount, discount_percentage } = variant;
+      const { name, product_id, description } = product;
 
       return `<div
           class="product-card flex gap-y-4 flex-col border-b-2 border-dotted border-neutral-200 pb-8 mb-8 last:border-b-0 md:flex-row md:gap-x-8"
@@ -220,7 +206,7 @@ function renderCartItems(cartItems, productInfo, inventory) {
 
             <!-- Product description -->
             <p class="text-sm text-neutral-600">
-              ${getDescription(productInfo, product_id)}
+              ${description}
             </p>
 
             <!-- Cart Controls -->
@@ -258,7 +244,7 @@ function renderCartItems(cartItems, productInfo, inventory) {
               <div class="ml-auto">
                 <span class="text-lg text-neutral-900 font-medium">$${formatPrice(sale_price * quantity)}</span>
                 <span class="text-neutral-600 text-[12px] line-through"
-                  >${discount || discount_percentage ? `$${formatPrice(list_price * quantity)}` : ""}</span
+                  >${list_price > sale_price ? `$${formatPrice(list_price * quantity)}` : ""}</span
                 >
               </div>
             </div>
@@ -307,11 +293,7 @@ function render() {
   }
 
   rightSection.classList.remove("hidden");
-  cartItemsContainer.innerHTML = renderCartItems(
-    cart.items,
-    products,
-    inventory,
-  );
+  cartItemsContainer.innerHTML = renderCartItems(cart.items);
 
   rightSection.innerHTML = renderSummary(cart.summary);
 }
@@ -463,10 +445,6 @@ function calculateSubtotal(cartItems) {
 
 function calculateDiscountAmount(discountPercentage, subtotal) {
   return (discountPercentage / 100) * subtotal;
-}
-
-function getDescription(data, productId) {
-  return data.find((item) => item.product_id === productId).description;
 }
 
 function updateCartSummary() {
