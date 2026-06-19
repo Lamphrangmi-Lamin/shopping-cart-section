@@ -6,6 +6,7 @@ const rightSection = document.getElementById("rightSection");
 const addCouponBtn = document.getElementById("addCouponBtn");
 const addCouponContainer = document.getElementById("addCouponContainer");
 const applyCouponBtn = document.getElementById("applyCouponBtn");
+const modalContainer = document.getElementById("modal-container");
 
 //* State / source of truth
 let cart = {};
@@ -13,6 +14,7 @@ let enteredCouponCode = "";
 let isCouponFormOpen = false;
 let appliedCoupon = null;
 let errorMessage = "";
+let itemPendingRemoval = null;
 
 const apiRequest = async (url, options = {}) => {
   const response = await fetch(url, options);
@@ -77,7 +79,8 @@ cartItemsContainer.addEventListener("click", (e) => {
 
   // * Remove item from cart
   if (action === "remove") {
-    cart.items = cart.items.filter((item) => item.unit.sku !== sku);
+    itemPendingRemoval = sku;
+    modalContainer.innerHTML = renderConfirmationModal();
   }
 
   // ? Update cart subtotal
@@ -165,6 +168,38 @@ rightSection.addEventListener("click", async (e) => {
   updateCartSummary();
 
   // * Re-render
+  render();
+});
+
+modalContainer.addEventListener("click", (e) => {
+  const button = e.target.closest("button");
+  const modal = e.target.closest("div[role='dialog']");
+
+  // * Handle when user click anywhere outside the modal
+  if (!modal) {
+    itemPendingRemoval = null;
+    modalContainer.innerHTML = "";
+    return;
+  }
+
+  if (!button) return;
+
+  const action = button.dataset.action;
+
+  // * Confirm removal of cart item
+  if (action === "confirm-removal") {
+    removeCartItem(itemPendingRemoval);
+    modalContainer.innerHTML = "";
+  }
+
+  // * Handle cancel and close modal action
+  if (action === "cancel-removal" || action === "close-modal") {
+    itemPendingRemoval = null;
+    modalContainer.innerHTML = "";
+  }
+
+  // * Update summary and re-render cart
+  updateCartSummary();
   render();
 });
 
@@ -404,6 +439,43 @@ function renderSummary(summaryData) {
         </div>`;
 }
 
+function renderConfirmationModal() {
+  return `
+      <div class="overlay fixed bg-black/70 inset-0 z-10 flex justify-center items-center">
+        <div role="dialog" aria-modal="true" class="bg-white w-max p-6 rounded-lg grid gap-8 mx-4">
+          <div class="flex justify-between">
+            <div class="flex flex-col gap-1">
+              <div class="text-neutral-900 text-lg font-semibold">
+                Confirm Item Removal
+              </div>
+              <div class="text-neutral-600 text-sm">
+                Are you sure you want to remove this item from your shopping cart?
+              </div>
+            </div>
+            <div class="">
+              <button data-action="close-modal" class="">
+                <i class="ri-close-fill text-xl text-neutral-600"></i>
+              </button>
+            </div>
+          </div>
+          <div class="font-medium flex gap-3">
+            <button
+              data-action="cancel-removal"
+              class="text-neutral-900 border-[0.5px] border-neutral-200 rounded py-2.5 px-4 shadow grow"
+            >
+              Cancel
+            </button>
+            <button
+              data-action="confirm-removal"
+              class="rounded shadow text-white py-2.5 px-4 bg-indigo-700 grow"
+            >
+              Yes
+            </button>
+          </div>
+        </div>
+      </div>`;
+}
+
 // * Helper utility functions
 function formatPrice(price) {
   if (Number.isInteger(price)) return price;
@@ -466,4 +538,8 @@ function updateCartSummary() {
     discount,
     total: Math.max(0, subtotal - discount + shipping),
   };
+}
+
+function removeCartItem(sku) {
+  cart.items = cart.items.filter((item) => item.unit.sku !== sku);
 }
