@@ -26,11 +26,27 @@ const apiRequest = async (url, options = {}) => {
 };
 
 async function init() {
-  // ? fetch cart data
-  cart = await apiRequest(
-    "https://www.greatfrontend.com/api/projects/challenges/e-commerce/cart-sample",
-  );
+  // * Check first if localstorage has the cart data
+  const cachedCart = localStorage.getItem("cart");
+  const cachedCoupon = localStorage.getItem("appliedCoupon");
 
+  if (cachedCoupon) {
+    appliedCoupon = JSON.parse(cachedCoupon);
+    isCouponFormOpen = true;
+  }
+
+  if (cachedCart) {
+    cart = JSON.parse(cachedCart);
+  } else {
+    // ? fetch cart data
+    cart = await apiRequest(
+      "https://www.greatfrontend.com/api/projects/challenges/e-commerce/cart-sample",
+    );
+    // * Persist the cart data to local storage
+    saveCart();
+  }
+
+  // * Re-render the page
   render();
 }
 
@@ -88,6 +104,9 @@ cartItemsContainer.addEventListener("click", (e) => {
 
   // ? Re-render cart items
   render();
+
+  // ? Save the cart
+  saveCart();
 });
 
 rightSection.addEventListener("click", async (e) => {
@@ -169,6 +188,9 @@ rightSection.addEventListener("click", async (e) => {
 
   // * Re-render
   render();
+
+  // * Save cart data
+  saveCart();
 });
 
 modalContainer.addEventListener("click", (e) => {
@@ -201,6 +223,7 @@ modalContainer.addEventListener("click", (e) => {
   // * Update summary and re-render cart
   updateCartSummary();
   render();
+  saveCart();
 });
 
 // * Rendering functions
@@ -359,7 +382,8 @@ function renderSummary(summaryData) {
               id="addCouponBtn"
               aria-disabled="false"
               href="#"
-              class="focus:ring-4 focus:ring-neutral-200 rounded px-1 aria-disabled:text-neutral-400"
+              class="focus:ring-4 focus:ring-neutral-200 rounded px-1 aria-disabled:text-neutral-400
+              "
             >
               <i class="ri-coupon-line"></i> Add coupon code
             </button>
@@ -542,4 +566,10 @@ function updateCartSummary() {
 
 function removeCartItem(sku) {
   cart.items = cart.items.filter((item) => item.unit.sku !== sku);
+}
+
+function saveCart() {
+  console.log("saved cart", cart);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  localStorage.setItem("appliedCoupon", JSON.stringify(appliedCoupon));
 }
